@@ -1,6 +1,6 @@
 # flutter_fe
 
-A new Flutter project.
+Flutter project streaming movie app kelompok 8 matkul mobile frontend.
 
 ## Getting Started
 
