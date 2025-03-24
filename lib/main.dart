@@ -3,8 +3,8 @@ import 'package:flutter_fe/screens/home_screen.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_fe/screens/login_screen.dart';
 
-void main() async{
-  // For env configuration 
+void main() async {
+  // For env configuration
   // WidgetsFlutterBinding.ensureInitialized();
   // await dotenv.load();
   runApp(const MyApp());
@@ -18,17 +18,17 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Dark Theme',
       debugShowCheckedModeBanner: false,
-      theme: ThemeData.dark().copyWith( // Gunakan tema gelap
-        primaryColor: Colors.yellow, // Warna utama
-        scaffoldBackgroundColor: Colors.black, // Latar belakang hitam
+      theme: ThemeData.dark().copyWith(
+        primaryColor: Colors.yellow,
+        scaffoldBackgroundColor: Colors.black,
         textTheme: const TextTheme(
           bodyLarge: TextStyle(fontSize: 18, color: Colors.white),
           bodyMedium: TextStyle(fontSize: 16, color: Colors.white70),
         ),
         elevatedButtonTheme: ElevatedButtonThemeData(
           style: ElevatedButton.styleFrom(
-            backgroundColor: Colors.yellow, // Warna tombol kuning
-            foregroundColor: Colors.black, // Teks tombol hitam
+            backgroundColor: Colors.yellow,
+            foregroundColor: Colors.black,
             padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 20),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(8),
@@ -37,8 +37,8 @@ class MyApp extends StatelessWidget {
         ),
         outlinedButtonTheme: OutlinedButtonThemeData(
           style: OutlinedButton.styleFrom(
-            foregroundColor: Colors.white, // Warna teks putih
-            side: const BorderSide(color: Colors.yellow, width: 2), // Outline kuning
+            foregroundColor: Colors.white,
+            side: const BorderSide(color: Colors.yellow, width: 2),
             padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 20),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(8),
