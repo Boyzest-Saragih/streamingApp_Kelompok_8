@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_fe/screens/home_screen.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flutter_fe/screens/login_screen.dart';
 
 void main() async{
   // For env configuration 
@@ -15,11 +16,37 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+      title: 'Flutter Dark Theme',
+      debugShowCheckedModeBanner: false,
+      theme: ThemeData.dark().copyWith( // Gunakan tema gelap
+        primaryColor: Colors.yellow, // Warna utama
+        scaffoldBackgroundColor: Colors.black, // Latar belakang hitam
+        textTheme: const TextTheme(
+          bodyLarge: TextStyle(fontSize: 18, color: Colors.white),
+          bodyMedium: TextStyle(fontSize: 16, color: Colors.white70),
+        ),
+        elevatedButtonTheme: ElevatedButtonThemeData(
+          style: ElevatedButton.styleFrom(
+            backgroundColor: Colors.yellow, // Warna tombol kuning
+            foregroundColor: Colors.black, // Teks tombol hitam
+            padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 20),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(8),
+            ),
+          ),
+        ),
+        outlinedButtonTheme: OutlinedButtonThemeData(
+          style: OutlinedButton.styleFrom(
+            foregroundColor: Colors.white, // Warna teks putih
+            side: const BorderSide(color: Colors.yellow, width: 2), // Outline kuning
+            padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 20),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(8),
+            ),
+          ),
+        ),
       ),
-      home: const HomeScreen(),
+      home: const LoginScreen(),
     );
   }
 }
