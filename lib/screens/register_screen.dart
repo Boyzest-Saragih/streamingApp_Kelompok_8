@@ -20,12 +20,30 @@ class _RegisterScreenState extends State<RegisterScreen> {
     String username = _usenameController.text;
     String password = _passwordController.text;
 
-    if (email.isNotEmpty || username.isNotEmpty || password.isNotEmpty) {
+    if (email.isEmpty || username.isEmpty || password.isEmpty) {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text("Semua kolom harus di isi")));
+      return;
+    }
+
+    if (password.length < 6) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Password minimal 6 karakter")),
+      );
+      return;
+    }
+
+    ScaffoldMessenger.of(
+      context,
+    ).showSnackBar(const SnackBar(content: Text("Registrasi berhasil!")));
+
+    Future.delayed(const Duration(seconds: 2), () {
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (context) => HomeScreen()),
       );
-    }
+    });
   }
 
   @override
