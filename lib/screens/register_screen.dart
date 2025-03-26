@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_fe/screens/home_screen.dart';
 import 'package:flutter_fe/screens/login_screen.dart';
 
 class RegisterScreen extends StatefulWidget {
@@ -19,45 +20,21 @@ class _RegisterScreenState extends State<RegisterScreen> {
     String username = _usenameController.text;
     String password = _passwordController.text;
 
-    if (email.isEmpty || username.isEmpty ||  password.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("Semua kolom harus di isi")),
-      );
-      return;
-    } 
-
-    if (password.length < 6) {
-       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("Password minimal 6 karakter")),
-      );
-      return;
-    }
-
-     ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("Registrasi berhasil! Silahkan Login")),
-      );
-
-    Future.delayed(const Duration(seconds: 2), () {
+    if (email.isNotEmpty || username.isNotEmpty || password.isNotEmpty) {
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => LoginScreen()),
+        MaterialPageRoute(builder: (context) => HomeScreen()),
       );
-    });
+    }
   }
-
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFF06141B),
-      appBar: AppBar(
-        backgroundColor: Color(0xFF021024),
-        title: Text("ZESTRID"),
-        centerTitle: true,
-      ),
       body: Center(
         child: Container(
-          width: 350,
+          width: 400,
           padding: EdgeInsets.all(20),
           decoration: BoxDecoration(
             color: Color(0xFF11212D),
@@ -67,18 +44,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
             mainAxisSize: MainAxisSize.min,
             children: [
               Align(
-                alignment: Alignment.centerLeft,
+                alignment: Alignment.center,
                 child: Text(
-                "Register",
-                style: TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
+                  "Register",
+                  style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                 ),
               ),
-              ),
-              
-              SizedBox(height: 20,),
+
+              SizedBox(height: 20),
               TextField(
                 cursorColor: Colors.grey,
                 style: TextStyle(color: Colors.black),
@@ -90,11 +63,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   hintStyle: TextStyle(color: Color(0xFF808080)),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10),
-                  )
+                  ),
                 ),
               ),
 
-              SizedBox(height: 10,),
+              SizedBox(height: 10),
               TextField(
                 cursorColor: Colors.grey,
                 style: TextStyle(color: Colors.black),
@@ -106,11 +79,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   hintStyle: TextStyle(color: Color(0xFF808080)),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10),
-                  )
+                  ),
                 ),
               ),
 
-              SizedBox(height: 10,),
+              SizedBox(height: 10),
               TextField(
                 cursorColor: Colors.grey,
                 style: TextStyle(color: Colors.black),
@@ -142,74 +115,80 @@ class _RegisterScreenState extends State<RegisterScreen> {
               ElevatedButton(
                 onPressed: _register,
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Color(0xFF052659),
                   minimumSize: Size(double.infinity, 50),
-
                 ),
-                child: const Text("Sign Up", style: TextStyle(color: Colors.white),),
-                ),
+                child: const Text("Sign Up"),
+              ),
 
-                SizedBox(height: 15,),
-                Text(
-                  "or sign up with",
-                  style: TextStyle(color: Colors.white, fontSize: 12,),
-                
-                ),
+              SizedBox(height: 15),
+              Text(
+                "or sign up with",
+                style: TextStyle(color: Colors.white, fontSize: 12),
+              ),
 
-                SizedBox(height: 10,),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Container(
-                      decoration: BoxDecoration(
-                        color: Color(0xFFCCD0CF),
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: IconButton(
-                        onPressed: () {},
-                        icon: Image.asset(
-                          'google.png',
-                          width: 20,
-                          height: 20,
-                        ),
-                      ),
+              SizedBox(height: 10),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Container(
+                    decoration: BoxDecoration(
+                      color: Color(0xFFCCD0CF),
+                      borderRadius: BorderRadius.circular(10),
                     ),
-
-                    SizedBox(width: 10),
-                    Container(
-                      decoration: BoxDecoration(
-                        color: Color(0xFFCCD0CF),
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: IconButton(
-                        onPressed: () {},
-                        icon: Image.asset(
-                          'facebook.png',
-                          width: 20,
-                          height: 20,
-                        ),
-                      ),
+                    child: IconButton(
+                      onPressed: () {},
+                      icon: Image.asset('google.png', width: 20, height: 20),
                     ),
+                  ),
 
-                    SizedBox(width: 10),
-                    Container(
-                      decoration: BoxDecoration(
-                        color: Color(0xFFCCD0CF),
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: IconButton(
-                        onPressed: () {},
-                        icon: Image.asset(
-                          'apple.png',
-                          width: 20,
-                          height: 20,
-                        ),
-                      ),
+                  SizedBox(width: 10),
+                  Container(
+                    decoration: BoxDecoration(
+                      color: Color(0xFFCCD0CF),
+                      borderRadius: BorderRadius.circular(10),
                     ),
-                  
+                    child: IconButton(
+                      onPressed: () {},
+                      icon: Image.asset('facebook.png', width: 20, height: 20),
+                    ),
+                  ),
 
-                  ],
-                ),
+                  SizedBox(width: 10),
+                  Container(
+                    decoration: BoxDecoration(
+                      color: Color(0xFFCCD0CF),
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: IconButton(
+                      onPressed: () {},
+                      icon: Image.asset('apple.png', width: 20, height: 20),
+                    ),
+                  ),
+                ],
+              ),
+
+              const SizedBox(height: 20),
+              Divider(color: Colors.white, thickness: 2),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Text("or already have an account?"),
+                  SizedBox(width: 0),
+                  TextButton(
+                    style: TextButton.styleFrom(padding: EdgeInsets.all(0)),
+                    onPressed: () {
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(builder: (context) => LoginScreen()),
+                      );
+                    },
+                    child: const Text(
+                      "Login",
+                      style: TextStyle(color: Colors.blue),
+                    ),
+                  ),
+                ],
+              ),
             ],
           ),
         ),
