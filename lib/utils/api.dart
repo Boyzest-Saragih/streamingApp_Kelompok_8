@@ -11,6 +11,7 @@ final token =
 final urlPopularMovie = Uri.parse("https://api.themoviedb.org/3/movie/popular");
 final urlTopRatedMovie = Uri.parse("https://api.themoviedb.org/3/movie/top_rated");
 final urlUpcomingMovie = Uri.parse("https://api.themoviedb.org/3/movie/upcoming");
+final urlMovieDetail = Uri.parse("https://api.themoviedb.org/3/movie/");
 final headers = {
   'Authorization': 'Bearer $token',
   'Content-Type': 'application/json',
@@ -54,6 +55,23 @@ Future<dynamic> getTopRatedMovies() async {
 Future<dynamic> getUpcomingMovies() async {
   try {
     final response = await http.get(urlUpcomingMovie, headers: headers);
+    if (response.statusCode == 200) {
+      final data = jsonDecode(response.body);
+      return data;
+    } else {
+      print('Gagal memuat data: ${response.statusCode}');
+      print('Response: ${response.body}');
+      return null;
+    }
+  } catch (e) {
+    print('Error Exception: $e');
+    return null;
+  }
+}
+
+Future<dynamic> getDetailMovie(movieId) async {
+  try {
+    final response = await http.get(urlMovieDetail, headers: headers);
     if (response.statusCode == 200) {
       final data = jsonDecode(response.body);
       return data;
