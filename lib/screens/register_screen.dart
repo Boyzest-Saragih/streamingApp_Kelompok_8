@@ -13,14 +13,17 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _usenameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _confirmPasswordController = TextEditingController();
   bool _isObscure = true;
+  bool _isConfirmObscure = true;
 
   void _register() {
     String email = _emailController.text;
     String username = _usenameController.text;
     String password = _passwordController.text;
+    String confirmPassword = _confirmPasswordController.text;
 
-    if (email.isEmpty || username.isEmpty || password.isEmpty) {
+    if (email.isEmpty || username.isEmpty || password.isEmpty || confirmPassword.isEmpty) {
       ScaffoldMessenger.of(
         context,
       ).showSnackBar(const SnackBar(content: Text("Semua kolom harus di isi")));
@@ -30,6 +33,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
     if (password.length < 6) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text("Password minimal 6 karakter")),
+      );
+      return;
+    }
+
+    if (password != confirmPassword) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Password dan konfirmasi password tidak sama")),
       );
       return;
     }
@@ -65,7 +75,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 alignment: Alignment.center,
                 child: Text(
                   "Register",
-                  style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                  style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.white),
                 ),
               ),
 
@@ -114,12 +124,40 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   hintStyle: TextStyle(color: Color(0xFF808080)),
                   suffixIcon: IconButton(
                     icon: Icon(
-                      _isObscure ? Icons.visibility : Icons.visibility_off,
+                      _isObscure ? Icons.visibility_off : Icons.visibility,
                       color: Color(0xFF808080),
                     ),
                     onPressed: () {
                       setState(() {
                         _isObscure = !_isObscure;
+                      });
+                    },
+                  ),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                ),
+              ),
+
+              SizedBox(height: 10),
+              TextField(
+                cursorColor: Colors.grey,
+                style: TextStyle(color: Colors.black),
+                controller: _confirmPasswordController,
+                obscureText: _isConfirmObscure,
+                decoration: InputDecoration(
+                  filled: true,
+                  fillColor: Color(0xFFCCD0CF),
+                  hintText: "Confirm Password",
+                  hintStyle: TextStyle(color: Color(0xFF808080)),
+                  suffixIcon: IconButton(
+                    icon: Icon(
+                      _isConfirmObscure ? Icons.visibility_off : Icons.visibility,
+                      color: Color(0xFF808080),
+                    ),
+                    onPressed: () {
+                      setState(() {
+                        _isConfirmObscure = !_isConfirmObscure;
                       });
                     },
                   ),
@@ -190,7 +228,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const Text("or already have an account?"),
+                  const Text("or already have an account?", style: TextStyle(color: Colors.white)),
                   SizedBox(width: 0),
                   TextButton(
                     style: TextButton.styleFrom(padding: EdgeInsets.all(0)),
