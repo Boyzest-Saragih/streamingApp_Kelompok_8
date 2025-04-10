@@ -32,7 +32,10 @@ class _LoginScreenState extends State<LoginScreen> {
       body: Center(
         child: Container(
           width: 400,
-          height: 390,
+          constraints: BoxConstraints(
+            maxWidth: MediaQuery.of(context).size.width * 0.9,
+          ),
+
           decoration: BoxDecoration(
             color: Color(0xFF11212D),
             borderRadius: BorderRadius.circular(15),
@@ -41,6 +44,7 @@ class _LoginScreenState extends State<LoginScreen> {
             padding: const EdgeInsets.all(40),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisSize: MainAxisSize.min,
               children: [
                 const Text(
                   "Login",
@@ -72,7 +76,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     hintText: "password",
                     suffixIcon: IconButton(
                       icon: Icon(
-                        _isObscure ? Icons.visibility : Icons.visibility_off,
+                        _isObscure ? Icons.visibility_off : Icons.visibility,
                         color: Color(0xFF808080),
                       ),
                       onPressed: () {
@@ -90,6 +94,52 @@ class _LoginScreenState extends State<LoginScreen> {
 
                 const SizedBox(height: 20),
                 ElevatedButton(onPressed: _login, child: const Text("Login")),
+                SizedBox(height: 15),
+              Text(
+                "or sign up with",
+                style: TextStyle(color: Colors.white, fontSize: 12),
+              ),
+
+              SizedBox(height: 10),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Container(
+                    decoration: BoxDecoration(
+                      color: Color(0xFFCCD0CF),
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: IconButton(
+                      onPressed: () {},
+                      icon: Image.asset('google.png', width: 20, height: 20),
+                    ),
+                  ),
+
+                  SizedBox(width: 10),
+                  Container(
+                    decoration: BoxDecoration(
+                      color: Color(0xFFCCD0CF),
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: IconButton(
+                      onPressed: () {},
+                      icon: Image.asset('facebook.png', width: 20, height: 20),
+                    ),
+                  ),
+
+                  SizedBox(width: 10),
+                  Container(
+                    decoration: BoxDecoration(
+                      color: Color(0xFFCCD0CF),
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: IconButton(
+                      onPressed: () {},
+                      icon: Image.asset('apple.png', width: 20, height: 20),
+                    ),
+                  ),
+                ],
+              ),
                 const SizedBox(height: 20),
                 Divider(color: Colors.white, thickness: 2),
                 const SizedBox(height: 20),
