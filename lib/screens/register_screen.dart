@@ -14,8 +14,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final TextEditingController _usenameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _confirmPasswordController = TextEditingController();
-  bool _isObscure = true;
-  bool _isConfirmObscure = true;
+  bool _isObscurePass = true;
+  bool _isObscureConfirmPass = true;
 
   void _register() {
     String email = _emailController.text;
@@ -23,37 +23,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
     String password = _passwordController.text;
     String confirmPassword = _confirmPasswordController.text;
 
-    if (email.isEmpty || username.isEmpty || password.isEmpty || confirmPassword.isEmpty) {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(const SnackBar(content: Text("Semua kolom harus di isi")));
-      return;
-    }
-
-    if (password.length < 6) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("Password minimal 6 karakter")),
-      );
-      return;
-    }
-
-    if (password != confirmPassword) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("Password dan konfirmasi password tidak sama")),
-      );
-      return;
-    }
-
-    ScaffoldMessenger.of(
-      context,
-    ).showSnackBar(const SnackBar(content: Text("Registrasi berhasil!")));
-
-    Future.delayed(const Duration(seconds: 2), () {
+    if (email.isNotEmpty || username.isNotEmpty || password.isNotEmpty) {
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (context) => HomePage()),
       );
-    });
+    }
   }
 
   @override
@@ -75,7 +50,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 alignment: Alignment.center,
                 child: Text(
                   "Register",
-                  style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.white),
+                  style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                 ),
               ),
 
@@ -116,7 +91,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 cursorColor: Colors.grey,
                 style: TextStyle(color: Colors.black),
                 controller: _passwordController,
-                obscureText: _isObscure,
+                obscureText: _isObscurePass,
                 decoration: InputDecoration(
                   filled: true,
                   fillColor: Color(0xFFCCD0CF),
@@ -124,12 +99,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   hintStyle: TextStyle(color: Color(0xFF808080)),
                   suffixIcon: IconButton(
                     icon: Icon(
-                      _isObscure ? Icons.visibility_off : Icons.visibility,
+                      _isObscurePass ? Icons.visibility_off:Icons.visibility,
                       color: Color(0xFF808080),
                     ),
                     onPressed: () {
                       setState(() {
-                        _isObscure = !_isObscure;
+                        _isObscurePass = !_isObscurePass;
                       });
                     },
                   ),
@@ -144,7 +119,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 cursorColor: Colors.grey,
                 style: TextStyle(color: Colors.black),
                 controller: _confirmPasswordController,
-                obscureText: _isConfirmObscure,
+                obscureText: _isObscureConfirmPass,
                 decoration: InputDecoration(
                   filled: true,
                   fillColor: Color(0xFFCCD0CF),
@@ -152,12 +127,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   hintStyle: TextStyle(color: Color(0xFF808080)),
                   suffixIcon: IconButton(
                     icon: Icon(
-                      _isConfirmObscure ? Icons.visibility_off : Icons.visibility,
+                      _isObscureConfirmPass ? Icons.visibility_off : Icons.visibility,
                       color: Color(0xFF808080),
                     ),
                     onPressed: () {
                       setState(() {
-                        _isConfirmObscure = !_isConfirmObscure;
+                        _isObscureConfirmPass = !_isObscureConfirmPass;
                       });
                     },
                   ),
@@ -166,6 +141,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   ),
                 ),
               ),
+
 
               const SizedBox(height: 30),
               ElevatedButton(
@@ -228,7 +204,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const Text("or already have an account?", style: TextStyle(color: Colors.white)),
+                  const Text("or already have an account?"),
                   SizedBox(width: 0),
                   TextButton(
                     style: TextButton.styleFrom(padding: EdgeInsets.all(0)),

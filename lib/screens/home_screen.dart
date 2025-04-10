@@ -182,8 +182,8 @@ class _HomePageState extends State<HomePage> {
                                             ),
                                             const SizedBox(width: 4),
                                             Text(
-                                              (popularMovies[index]["vote_average"]
-                                                as double).toStringAsFixed(1),
+                                              popularMovies[index]["vote_average"]
+                                                  .toStringAsFixed(2),
                                             ),
                                           ],
                                         ),
@@ -298,8 +298,8 @@ class _HomePageState extends State<HomePage> {
                                             ),
                                             const SizedBox(width: 4),
                                             Text(
-                                              (topRatedMovies[index]["vote_average"]
-                                                as double).toStringAsFixed(1),
+                                              topRatedMovies[index]["vote_average"]
+                                                  .toStringAsFixed(2),
                                             ),
                                           ],
                                         ),
@@ -402,7 +402,23 @@ class _HomePageState extends State<HomePage> {
                                           overflow: TextOverflow.ellipsis,
                                           textAlign: TextAlign.center,
                                           style: TextStyle(color: Colors.white),
-                                        ),                          
+                                        ),
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            const Icon(
+                                              Icons.star,
+                                              color: Colors.yellow,
+                                              size: 16,
+                                            ),
+                                            const SizedBox(width: 4),
+                                            Text(
+                                              upcomingMovies[index]["vote_average"]
+                                                  .toStringAsFixed(2),
+                                            ),
+                                          ],
+                                        ),
                                       ],
                                     ),
                                   ),
