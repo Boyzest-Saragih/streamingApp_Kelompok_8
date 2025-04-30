@@ -10,11 +10,33 @@ final urlTopRatedMovie = Uri.parse(
 final urlUpcomingMovie = Uri.parse(
   "https://api.themoviedb.org/3/movie/upcoming",
 );
+
+final genreMovieUrl = Uri.parse(
+  "https://api.themoviedb.org/3/genre/movie/list",
+);
+
 final urlMovieDetail = Uri.parse("https://api.themoviedb.org/3/movie/");
 final headers = {
   'Authorization': 'Bearer $token',
   'Content-Type': 'application/json',
 };
+
+Future<dynamic> getGenreMovies() async {
+  try {
+    final response = await http.get(genreMovieUrl, headers: headers);
+    if (response.statusCode == 200) {
+      final data = jsonDecode(response.body);
+      return data['genres'];
+    } else {
+      print('Status Code: ${response.statusCode}');
+      print('Error Response: ${response.body}');
+      return null;
+    }
+  } catch (e) {
+    print('Error : $e');
+    return null;
+  }
+}
 
 Future<dynamic> getPopularMovies() async {
   try {
