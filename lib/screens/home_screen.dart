@@ -15,6 +15,8 @@ class _HomePageState extends State<HomePage> {
   List<dynamic> upcomingMovies = [];
   TextEditingController _searchCtr = TextEditingController();
   String _searchTextField = "";
+  String _selectedLanguage = 'English';
+  bool _isDarkMode = false;
 
   @override
   void initState() {
@@ -41,7 +43,12 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leading: IconButton(onPressed: () {}, icon: Icon(Icons.menu)),
+        leading: Builder(
+          builder: (context) => IconButton(
+            onPressed: () => Scaffold.of(context).openDrawer(),
+            icon: Icon(Icons.menu),
+          ),
+        ),
         title: Text("MovieFy"),
         actions: [
           SizedBox(
@@ -76,6 +83,84 @@ class _HomePageState extends State<HomePage> {
           IconButton(onPressed: () {}, icon: Icon(Icons.search)),
         ],
       ),
+      drawer: Drawer(
+        width: 225,
+        child: ListView(
+          padding: EdgeInsets.zero,
+          children: [
+            Container(
+              padding: EdgeInsets.all(16),
+              color: const Color.fromARGB(255, 25, 24, 25),
+              child: Row(
+                children: [
+                  CircleAvatar(
+                    radius: 14, 
+                    backgroundColor: Colors.white,
+                    child: Text(
+                      'A',
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 14,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                  SizedBox(width: 10),
+                  Text(
+                    "Account",
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 18, 
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Divider(
+              color: const Color.fromARGB(255, 80, 80, 80), // transparan, samar
+              thickness: 1,
+              height: 1,
+            ),
+            ListTile(
+              leading: Icon(Icons.language),
+              title: DropdownButton<String>(
+                value: _selectedLanguage,
+                items: [
+                  DropdownMenuItem(
+                    value: 'English',
+                    child: Text('English', style: TextStyle(color: Colors.white)),
+                  ),
+                  DropdownMenuItem(
+                    value: 'Indonesian',
+                    child: Text('Indonesian', style: TextStyle(color: Colors.white)),
+                  ),
+                ],
+                onChanged: (value) {
+                  setState(() {
+                    _selectedLanguage = value!;
+                  });
+                },
+                isExpanded: true,
+                underline: SizedBox(),
+              ),
+            ),
+            SwitchListTile(
+              title: Text('Theme'),
+              secondary: Icon(
+                _isDarkMode ? Icons.dark_mode : Icons.light_mode),
+              value: _isDarkMode,
+              onChanged: (val) {
+                setState(() {
+                  _isDarkMode = val;
+                });
+              },
+              activeColor: Colors.purple, 
+              inactiveThumbColor: Colors.grey, 
+            ),
+          ],
+        ),
+      ),
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -108,7 +193,7 @@ class _HomePageState extends State<HomePage> {
             const SizedBox(height: 5),
             SizedBox(
               height: 200,
-              child:
+              child: 
                   popularMovies.isEmpty
                       ? Center(child: CircularProgressIndicator())
                       : ListView.builder(
@@ -120,82 +205,82 @@ class _HomePageState extends State<HomePage> {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder:
-                                      (context) => WatchPage(
-                                        titleMovie:
-                                            popularMovies[index]['title'],
-                                        descMovie:
-                                            popularMovies[index]['overview'],
-                                        releaseDateMovie:
-                                            popularMovies[index]['release_date'],
-                                      ),
-                                ),
-                              );
-                            },
-                            child: Container(
-                              width: 150,
-                              margin: EdgeInsets.symmetric(horizontal: 8),
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(10),
-                                image: DecorationImage(
-                                  image: NetworkImage(
-                                    getImageUrl(
-                                      popularMovies[index]["poster_path"],
-                                    ),
+                                  builder: 
+                                  (context) => WatchPage(
+                                    titleMovie: 
+                                      popularMovies[index]['title'],
+                                    descMovie: 
+                                      popularMovies[index]['overview'],
+                                    releaseDateMovie:
+                                      popularMovies[index]['release_date'],
                                   ),
-                                  fit: BoxFit.cover,
-                                ),
                               ),
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.end,
-                                children: [
-                                  Container(
-                                    alignment: Alignment.bottomCenter,
-                                    height: 48,
-                                    decoration: BoxDecoration(
-                                      gradient: LinearGradient(
-                                        begin: Alignment.bottomCenter,
-                                        end: Alignment.topCenter,
-                                        colors: [
-                                          Colors.black,
-                                          Colors.transparent,
-                                        ],
-                                      ),
-                                    ),
-                                    child: Column(
-                                      children: [
-                                        Text(
-                                          popularMovies[index]['title'],
-                                          maxLines: 1,
-                                          overflow: TextOverflow.ellipsis,
-                                          textAlign: TextAlign.center,
-                                          style: TextStyle(color: Colors.white),
-                                        ),
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          children: [
-                                            const Icon(
-                                              Icons.star,
-                                              color: Colors.yellow,
-                                              size: 16,
-                                            ),
-                                            const SizedBox(width: 4),
-                                            Text(
-                                              popularMovies[index]["vote_average"]
-                                                  .toStringAsFixed(2),
-                                            ),
-                                          ],
-                                        ),
+                            );
+                          },
+                          child: Container(
+                            width: 150,
+                            margin: EdgeInsets.symmetric(horizontal: 8),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10),
+                              image: DecorationImage(
+                                image: NetworkImage(
+                                  getImageUrl(
+                                    popularMovies[index]["poster_path"],
+                                  ),
+                                ),
+                                fit: BoxFit.cover,
+                              ),
+                            ),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                Container(
+                                  alignment: Alignment.bottomCenter,
+                                  height: 48,
+                                  decoration: BoxDecoration(
+                                    gradient: LinearGradient(
+                                      begin: Alignment.bottomCenter,
+                                      end: Alignment.topCenter,
+                                      colors: [
+                                        Colors.black,
+                                        Colors.transparent,
                                       ],
                                     ),
                                   ),
-                                ],
-                              ),
+                                  child: Column(
+                                    children: [
+                                      Text(
+                                        popularMovies[index]['title'],
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(color: Colors.white),
+                                      ),
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          const Icon(
+                                            Icons.star,
+                                            color: Colors.yellow,
+                                            size: 16,
+                                          ),
+                                          const SizedBox(width: 4),
+                                          Text(
+                                            popularMovies[index]["vote_average"]
+                                                .toStringAsFixed(2),
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
                             ),
-                          );
-                        },
-                      ),
+                          ),
+                        );
+                      },
+                    ),
             ),
 
             const SizedBox(height: 40),
@@ -224,7 +309,7 @@ class _HomePageState extends State<HomePage> {
             const SizedBox(height: 5),
             SizedBox(
               height: 200,
-              child:
+              child: 
                   topRatedMovies.isEmpty
                       ? Center(child: CircularProgressIndicator())
                       : ListView.builder(
@@ -232,90 +317,89 @@ class _HomePageState extends State<HomePage> {
                         itemCount: topRatedMovies.length,
                         itemBuilder: (context, index) {
                           return GestureDetector(
-                            onTap: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder:
-                                      (context) => WatchPage(
-                                        titleMovie:
-                                            topRatedMovies[index]['title'],
-                                        descMovie:
-                                            topRatedMovies[index]['overview'],
-                                        releaseDateMovie:
-                                            topRatedMovies[index]['release_date'],
-                                      ),
-                                ),
-                              );
-                            },
-                            child: Container(
-                              width: 150,
-                              margin: EdgeInsets.symmetric(horizontal: 8),
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(10),
-                                image: DecorationImage(
-                                  image: NetworkImage(
-                                    getImageUrl(
-                                      topRatedMovies[index]["poster_path"],
-                                    ),
-                                  ),
-                                  fit: BoxFit.cover,
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: 
+                                    (context) => WatchPage(
+                                      titleMovie: 
+                                          topRatedMovies[index]['title'],
+                                      descMovie: 
+                                          topRatedMovies[index]['overview'],
+                                      releaseDateMovie:
+                                          topRatedMovies[index]['release_date'],
                                 ),
                               ),
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.end,
-                                children: [
-                                  Container(
-                                    alignment: Alignment.bottomCenter,
-                                    height: 48,
-                                    decoration: BoxDecoration(
-                                      gradient: LinearGradient(
-                                        begin: Alignment.bottomCenter,
-                                        end: Alignment.topCenter,
-                                        colors: [
-                                          Colors.black,
-                                          Colors.transparent,
-                                        ],
-                                      ),
+                            );
+                          },
+                          child: Container(
+                            width: 150,
+                            margin: EdgeInsets.symmetric(horizontal: 8),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10),
+                              image: DecorationImage(
+                                image: NetworkImage(
+                                  getImageUrl(
+                                      topRatedMovies[index]["poster_path"],
                                     ),
-                                    child: Column(
-                                      children: [
-                                        Text(
-                                          topRatedMovies[index]['title'],
-                                          maxLines: 1,
-                                          overflow: TextOverflow.ellipsis,
-                                          textAlign: TextAlign.center,
-                                          style: TextStyle(color: Colors.white),
-                                        ),
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          children: [
-                                            const Icon(
-                                              Icons.star,
-                                              color: Colors.yellow,
-                                              size: 16,
-                                            ),
-                                            const SizedBox(width: 4),
-                                            Text(
-                                              topRatedMovies[index]["vote_average"]
-                                                  .toStringAsFixed(2),
-                                            ),
-                                          ],
-                                        ),
+                                ),
+                                fit: BoxFit.cover,
+                              ),
+                            ),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                Container(
+                                  alignment: Alignment.bottomCenter,
+                                  height: 48,
+                                  decoration: BoxDecoration(
+                                    gradient: LinearGradient(
+                                      begin: Alignment.bottomCenter,
+                                      end: Alignment.topCenter,
+                                      colors: [
+                                        Colors.black,
+                                        Colors.transparent,
                                       ],
                                     ),
                                   ),
-                                ],
-                              ),
+                                  child: Column(
+                                    children: [
+                                      Text(
+                                        topRatedMovies[index]['title'],
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(color: Colors.white),
+                                      ),
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          const Icon(
+                                            Icons.star,
+                                            color: Colors.yellow,
+                                            size: 16,
+                                          ),
+                                          const SizedBox(width: 4),
+                                          Text(
+                                            topRatedMovies[index]
+                                                    ["vote_average"]
+                                                .toStringAsFixed(2),
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
                             ),
-                          );
-                        },
-                      ),
+                          ),
+                        );
+                      },
+                    ),
             ),
-
             const SizedBox(height: 40),
-
             // Upcoming List
             Padding(
               padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
@@ -340,94 +424,89 @@ class _HomePageState extends State<HomePage> {
             const SizedBox(height: 5),
             SizedBox(
               height: 200,
-              child:
-                  upcomingMovies.isEmpty
-                      ? Center(child: CircularProgressIndicator())
-                      : ListView.builder(
-                        scrollDirection: Axis.horizontal,
-                        itemCount: upcomingMovies.length,
-                        itemBuilder: (context, index) {
-                          return GestureDetector(
-                            onTap: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder:
-                                      (context) => WatchPage(
-                                        titleMovie:
-                                            upcomingMovies[index]['title'],
-                                        descMovie:
-                                            upcomingMovies[index]['overview'],
-                                        releaseDateMovie:
-                                            upcomingMovies[index]['release_date'],
-                                      ),
-                                ),
-                              );
-                            },
-                            child: Container(
-                              width: 150,
-                              margin: EdgeInsets.symmetric(horizontal: 8),
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(10),
-                                image: DecorationImage(
-                                  image: NetworkImage(
-                                    getImageUrl(
-                                      upcomingMovies[index]["poster_path"],
-                                    ),
-                                  ),
-                                  fit: BoxFit.cover,
+              child: upcomingMovies.isEmpty
+                  ? Center(child: CircularProgressIndicator())
+                  : ListView.builder(
+                      scrollDirection: Axis.horizontal,
+                      itemCount: upcomingMovies.length,
+                      itemBuilder: (context, index) {
+                        return GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => WatchPage(
+                                  titleMovie: upcomingMovies[index]['title'],
+                                  descMovie: upcomingMovies[index]['overview'],
+                                  releaseDateMovie:
+                                      upcomingMovies[index]['release_date'],
                                 ),
                               ),
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.end,
-                                children: [
-                                  Container(
-                                    alignment: Alignment.bottomCenter,
-                                    height: 48,
-                                    decoration: BoxDecoration(
-                                      gradient: LinearGradient(
-                                        begin: Alignment.bottomCenter,
-                                        end: Alignment.topCenter,
-                                        colors: [
-                                          Colors.black,
-                                          Colors.transparent,
-                                        ],
-                                      ),
-                                    ),
-                                    child: Column(
-                                      children: [
-                                        Text(
-                                          upcomingMovies[index]['title'],
-                                          maxLines: 1,
-                                          overflow: TextOverflow.ellipsis,
-                                          textAlign: TextAlign.center,
-                                          style: TextStyle(color: Colors.white),
-                                        ),
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          children: [
-                                            const Icon(
-                                              Icons.star,
-                                              color: Colors.yellow,
-                                              size: 16,
-                                            ),
-                                            const SizedBox(width: 4),
-                                            Text(
-                                              upcomingMovies[index]["vote_average"]
-                                                  .toStringAsFixed(2),
-                                            ),
-                                          ],
-                                        ),
+                            );
+                          },
+                          child: Container(
+                            width: 150,
+                            margin: EdgeInsets.symmetric(horizontal: 8),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10),
+                              image: DecorationImage(
+                                image: NetworkImage(
+                                  getImageUrl(
+                                      upcomingMovies[index]["poster_path"]),
+                                ),
+                                fit: BoxFit.cover,
+                              ),
+                            ),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                Container(
+                                  alignment: Alignment.bottomCenter,
+                                  height: 48,
+                                  decoration: BoxDecoration(
+                                    gradient: LinearGradient(
+                                      begin: Alignment.bottomCenter,
+                                      end: Alignment.topCenter,
+                                      colors: [
+                                        Colors.black,
+                                        Colors.transparent,
                                       ],
                                     ),
                                   ),
-                                ],
-                              ),
+                                  child: Column(
+                                    children: [
+                                      Text(
+                                        upcomingMovies[index]['title'],
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(color: Colors.white),
+                                      ),
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          const Icon(
+                                            Icons.star,
+                                            color: Colors.yellow,
+                                            size: 16,
+                                          ),
+                                          const SizedBox(width: 4),
+                                          Text(
+                                            upcomingMovies[index]["vote_average"]
+                                                .toStringAsFixed(2),
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
                             ),
-                          );
-                        },
-                      ),
+                          ),
+                        );
+                      },
+                    ),
             ),
             const SizedBox(height: 40),
           ],
