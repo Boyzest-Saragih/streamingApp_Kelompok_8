@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_fe/provider/user.dart';
+import 'package:flutter_fe/screens/complete_profile/complete_profile.dart';
 import 'package:flutter_fe/screens/home_screen.dart';
 import 'package:flutter_fe/screens/login_screen.dart';
+import 'package:provider/provider.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
@@ -13,22 +16,27 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _usenameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-  final TextEditingController _confirmPasswordController = TextEditingController();
+  final TextEditingController _confirmPasswordController =
+      TextEditingController();
   bool _isObscurePass = true;
   bool _isObscureConfirmPass = true;
+  bool checkBox = false;
 
   void _register() {
+    final user = Provider.of<User>(context,listen: false);
     String email = _emailController.text;
     String username = _usenameController.text;
     String password = _passwordController.text;
     String confirmPassword = _confirmPasswordController.text;
 
-    if (email.isNotEmpty || username.isNotEmpty || password.isNotEmpty) {
-      Navigator.pushReplacement(
+    if (email.isNotEmpty || username.isNotEmpty || password.isNotEmpty||password==confirmPassword) {
+      user.addUser(email, username, password);
+      Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) => HomePage()),
+        MaterialPageRoute(builder: (context) => CompleteProfile()),
       );
     }
+    user.getUserLogin(email);
   }
 
   @override
@@ -99,7 +107,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   hintStyle: TextStyle(color: Color(0xFF808080)),
                   suffixIcon: IconButton(
                     icon: Icon(
-                      _isObscurePass ? Icons.visibility_off:Icons.visibility,
+                      _isObscurePass ? Icons.visibility_off : Icons.visibility,
                       color: Color(0xFF808080),
                     ),
                     onPressed: () {
@@ -127,7 +135,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   hintStyle: TextStyle(color: Color(0xFF808080)),
                   suffixIcon: IconButton(
                     icon: Icon(
-                      _isObscureConfirmPass ? Icons.visibility_off : Icons.visibility,
+                      _isObscureConfirmPass
+                          ? Icons.visibility_off
+                          : Icons.visibility,
                       color: Color(0xFF808080),
                     ),
                     onPressed: () {
@@ -142,10 +152,27 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 ),
               ),
 
+              const SizedBox(height: 10),
 
-              const SizedBox(height: 30),
+              CheckboxListTile(
+                activeColor: Colors.amber,
+                title: Text(
+                  "i agree to thr Terms of Services and Privacy Policy",
+                  style: TextStyle(fontSize: 11),
+                ),
+                value: checkBox,
+                onChanged: (bool? newValue) {
+                  setState(() {
+                    checkBox = newValue!;
+                  });
+                },
+                controlAffinity: ListTileControlAffinity.leading,
+              ),
+
+              const SizedBox(height: 10),
+
               ElevatedButton(
-                onPressed: _register,
+                onPressed: checkBox ? _register : null,
                 style: ElevatedButton.styleFrom(
                   minimumSize: Size(double.infinity, 50),
                 ),

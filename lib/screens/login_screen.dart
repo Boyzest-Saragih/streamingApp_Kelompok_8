@@ -32,9 +32,6 @@ class _LoginScreenState extends State<LoginScreen> {
       body: Center(
         child: Container(
           width: 400,
-          constraints: BoxConstraints(
-            maxWidth: MediaQuery.of(context).size.width * 0.9,
-          ),
 
           decoration: BoxDecoration(
             color: Color(0xFF11212D),
@@ -95,53 +92,57 @@ class _LoginScreenState extends State<LoginScreen> {
                 const SizedBox(height: 20),
                 ElevatedButton(onPressed: _login, child: const Text("Login")),
                 SizedBox(height: 15),
-              Text(
-                "or sign up with",
-                style: TextStyle(color: Colors.white, fontSize: 12),
-              ),
+                Text(
+                  "or sign up with",
+                  style: TextStyle(color: Colors.white, fontSize: 12),
+                ),
 
-              SizedBox(height: 10),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Container(
-                    decoration: BoxDecoration(
-                      color: Color(0xFFCCD0CF),
-                      borderRadius: BorderRadius.circular(10),
+                SizedBox(height: 10),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Container(
+                      decoration: BoxDecoration(
+                        color: Color(0xFFCCD0CF),
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: IconButton(
+                        onPressed: () {},
+                        icon: Image.asset('google.png', width: 20, height: 20),
+                      ),
                     ),
-                    child: IconButton(
-                      onPressed: () {},
-                      icon: Image.asset('google.png', width: 20, height: 20),
-                    ),
-                  ),
 
-                  SizedBox(width: 10),
-                  Container(
-                    decoration: BoxDecoration(
-                      color: Color(0xFFCCD0CF),
-                      borderRadius: BorderRadius.circular(10),
+                    SizedBox(width: 10),
+                    Container(
+                      decoration: BoxDecoration(
+                        color: Color(0xFFCCD0CF),
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: IconButton(
+                        onPressed: () {},
+                        icon: Image.asset(
+                          'facebook.png',
+                          width: 20,
+                          height: 20,
+                        ),
+                      ),
                     ),
-                    child: IconButton(
-                      onPressed: () {},
-                      icon: Image.asset('facebook.png', width: 20, height: 20),
-                    ),
-                  ),
 
-                  SizedBox(width: 10),
-                  Container(
-                    decoration: BoxDecoration(
-                      color: Color(0xFFCCD0CF),
-                      borderRadius: BorderRadius.circular(10),
+                    SizedBox(width: 10),
+                    Container(
+                      decoration: BoxDecoration(
+                        color: Color(0xFFCCD0CF),
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: IconButton(
+                        onPressed: () {},
+                        icon: Image.asset('apple.png', width: 20, height: 20),
+                      ),
                     ),
-                    child: IconButton(
-                      onPressed: () {},
-                      icon: Image.asset('apple.png', width: 20, height: 20),
-                    ),
-                  ),
-                ],
-              ),
+                  ],
+                ),
                 const SizedBox(height: 20),
-                Divider(color: Colors.white, thickness: 2),
+                const Divider(color: Colors.white, thickness: 2),
                 const SizedBox(height: 20),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
