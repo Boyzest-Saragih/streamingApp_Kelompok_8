@@ -10,6 +10,7 @@ class CompleteProfile extends StatefulWidget {
   State<CompleteProfile> createState() => _CompleteProfileState();
 }
 
+
 class _CompleteProfileState extends State<CompleteProfile> {
   final List<String> movieGenres = [
     "Action",
@@ -65,7 +66,7 @@ class _CompleteProfileState extends State<CompleteProfile> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text("Complete Your Profile")),
-      body: Padding(
+      body: SingleChildScrollView(
         padding: EdgeInsets.all(10),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -126,7 +127,7 @@ class _CompleteProfileState extends State<CompleteProfile> {
             ),
 
             const SizedBox(height: 40),
-
+            
             ElevatedButton(
               onPressed: selectedGender != null ? completeProfileButton : null,
               style: ElevatedButton.styleFrom(
