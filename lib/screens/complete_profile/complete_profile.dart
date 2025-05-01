@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_fe/provider/language.dart';
 import 'package:flutter_fe/provider/user.dart';
 import 'package:flutter_fe/screens/home_screen.dart';
 import 'package:provider/provider.dart';
@@ -9,7 +10,6 @@ class CompleteProfile extends StatefulWidget {
   @override
   State<CompleteProfile> createState() => _CompleteProfileState();
 }
-
 
 class _CompleteProfileState extends State<CompleteProfile> {
   final List<String> movieGenres = [
@@ -64,15 +64,20 @@ class _CompleteProfileState extends State<CompleteProfile> {
 
   @override
   Widget build(BuildContext context) {
+    final languageProvider = Provider.of<LanguageProv>(context);
+    final enLang = languageProvider.currentLanguage == "en" ? true : false;
+
     return Scaffold(
-      appBar: AppBar(title: const Text("Complete Your Profile")),
+      appBar: AppBar(
+        title: Text(enLang ? "Complete Your Profile" : "Lengkapi Profil Anda"),
+      ),
       body: SingleChildScrollView(
         padding: EdgeInsets.all(10),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const SizedBox(height: 10),
-            const Text("Select at least 3 Genres"),
+            Text(enLang ? "Select at least 3 Genres" : "Pilih minimal 3 Genre"),
             const SizedBox(height: 15),
             Wrap(
               spacing: 8,
@@ -108,7 +113,7 @@ class _CompleteProfileState extends State<CompleteProfile> {
             const SizedBox(height: 40),
             const Divider(),
             const SizedBox(height: 20),
-            const Text("Select your gender"),
+            Text(enLang ? "Select your gender" : "Pilih jenis kelamin Anda"),
             Column(
               children:
                   genderOptions.map((gender) {
@@ -127,7 +132,7 @@ class _CompleteProfileState extends State<CompleteProfile> {
             ),
 
             const SizedBox(height: 40),
-            
+
             ElevatedButton(
               onPressed: selectedGender != null ? completeProfileButton : null,
               style: ElevatedButton.styleFrom(
