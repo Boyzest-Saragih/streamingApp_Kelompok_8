@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_fe/provider/user.dart';
+import 'package:flutter_fe/screens/account_screen.dart';
 import 'package:flutter_fe/screens/complete_profile/complete_profile.dart';
 import 'package:flutter_fe/screens/login_screen.dart';
 import 'package:flutter_fe/screens/register_screen.dart';
@@ -47,7 +48,8 @@ class MyApp extends StatelessWidget {
           ),
         ),
       ),
-      home: const RegisterScreen(),
+      home:
+      const RegisterScreen(),
     );
   }
 }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_fe/screens/account_screen.dart';
 import 'package:flutter_fe/screens/watch_screen.dart';
 import '../utils/api.dart';
 
@@ -44,6 +45,16 @@ class _HomePageState extends State<HomePage> {
         leading: IconButton(onPressed: () {}, icon: Icon(Icons.menu)),
         title: Text("MovieFy"),
         actions: [
+        // Tombol Navigasi ke Account Screen
+        IconButton(
+          icon: Icon(Icons.account_circle),
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (_) => const AccountScreen()),
+            );
+          },
+        ),
           SizedBox(
             width: 150,
             height: 40,
@@ -83,7 +94,7 @@ class _HomePageState extends State<HomePage> {
             SizedBox(),
 
             const SizedBox(height: 20),
-
+            
             // Top List
             Padding(
               padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
@@ -106,6 +117,7 @@ class _HomePageState extends State<HomePage> {
               ),
             ),
             const SizedBox(height: 5),
+        
             SizedBox(
               height: 200,
               child:
