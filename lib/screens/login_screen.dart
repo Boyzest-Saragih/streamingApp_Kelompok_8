@@ -66,30 +66,22 @@ class _LoginScreenState extends State<LoginScreen> {
         return;
       } 
 
-      List<dynamic> matchUser = userProvider.usersData.where((user) => user[0]== email).toList();
+      try {
+      userProvider.getUserLogin(email);
+      final userData = userProvider.currentUser[1];
 
-      if (matchUser.isEmpty){
-        _showBanner(englishMode ? "Email not found" : "Email tidak ditemukan");
-        return;
-      }
-
-      List<dynamic> matchUserlist = matchUser.first;
-      int userIndex = userProvider.usersData.indexOf(matchUserlist);
-      userProvider.currentUser = [userIndex, matchUserlist];
-
-      if (matchUserlist[2].toString() == password){
+      if (userData[2].toString() == password){
         Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => HomePage()),);
+        MaterialPageRoute(builder: (context) => HomePage()));
       } else {
         _showBanner(englishMode? "Incorrect Password" : "Password salah");
       }
-
-
+    } catch (e) {
+      _showBanner(englishMode? "Email not found" : "Email tidak ditemukan");
+    }
   }
   
-
-
 
   @override
   Widget build(BuildContext context) {
