@@ -20,17 +20,40 @@ class _LoginScreenState extends State<LoginScreen> {
   bool _isObscure = true;
 
   void _login() {
+    final englishMode = Provider.of<LanguageProv>(context, listen: false).currentLanguage == "en";
     final user = Provider.of<User>(context, listen: false);
     String email = _emailController.text;
     String password = _passwordController.text;
-    user.getUserLogin(email);
-    if (email.isNotEmpty && password.isNotEmpty) {
-      Navigator.pushReplacement(
+
+    if (email.isEmpty || password.isEmpty) {
+        final snackBar = SnackBar(
+          content: Row(
+            children: [
+              Icon(Icons.error_outline, color: Colors.white,),
+              SizedBox(width: 10,),
+              Expanded(child: Text(englishMode? "Email and password cannot be empty" : "Email dan password tidak boleh kosong")),
+            ],
+          ),
+          backgroundColor: Colors.grey,
+          behavior: SnackBarBehavior.floating,
+          duration: Duration(seconds: 4),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+          ),
+          margin: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+        );
+        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+        return;
+      } else {
+        Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => HomePage()),
-      );
-    }
+        MaterialPageRoute(builder: (context) => HomePage()),);
+      }
+       user.getUserLogin(email);
   }
+  
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -123,11 +146,29 @@ class _LoginScreenState extends State<LoginScreen> {
                           borderRadius: BorderRadius.circular(10),
                         ),
                         child: IconButton(
-                          onPressed: () {},
-                          icon: Image.asset(
-                            'assets/google.png',
-                            width: 20,
-                            height: 20,
+                          onPressed: () {
+                            final snackbar = SnackBar(
+                            content: Row( children: [
+                              Icon(Icons.notifications_active,color: const Color.fromARGB(255, 75, 74, 74),),
+                              SizedBox(width: 10,),
+                              Text(
+                                enLang ? "Sign up for Google coming soon!" : "Daftar dengan Google segerah hadir!"
+                              ),
+                            ]
+                            ),
+                            duration: Duration(seconds: 3),
+                            backgroundColor: Colors.deepOrangeAccent,
+                            behavior: SnackBarBehavior.floating,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            margin: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                          ); ScaffoldMessenger.of(context).showSnackBar(snackbar);
+                          },
+                          icon: Image.network(
+                            'https://cdn-icons-png.flaticon.com/128/281/281764.png',
+                            width: 25,
+                            height: 25,
                           ),
                         ),
                       ),
@@ -139,11 +180,29 @@ class _LoginScreenState extends State<LoginScreen> {
                           borderRadius: BorderRadius.circular(10),
                         ),
                         child: IconButton(
-                          onPressed: () {},
-                          icon: Image.asset(
-                            'assets/facebook.png',
-                            width: 20,
-                            height: 20,
+                          onPressed: () {
+                            final snackbar = SnackBar(
+                            content: Row( children: [
+                              Icon(Icons.notifications_active,color: const Color.fromARGB(255, 75, 74, 74),),
+                              SizedBox(width: 10,),
+                              Text(
+                                enLang ? "Sign up for Facebook coming soon!" : "Daftar dengan Facebook segerah hadir!"
+                              ),
+                            ]
+                            ),
+                            duration: Duration(seconds: 3),
+                            backgroundColor: Colors.deepOrangeAccent,
+                            behavior: SnackBarBehavior.floating,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            margin: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                          ); ScaffoldMessenger.of(context).showSnackBar(snackbar);
+                          },
+                          icon: Image.network(
+                            'https://cdn-icons-png.flaticon.com/128/5968/5968764.png',
+                            width: 25,
+                            height: 25,
                           ),
                         ),
                       ),
@@ -155,11 +214,29 @@ class _LoginScreenState extends State<LoginScreen> {
                           borderRadius: BorderRadius.circular(10),
                         ),
                         child: IconButton(
-                          onPressed: () {},
-                          icon: Image.asset(
-                            'assets/apple.png',
-                            width: 20,
-                            height: 20,
+                          onPressed: () {
+                            final snackbar = SnackBar(
+                            content: Row( children: [
+                              Icon(Icons.notifications_active,color: const Color.fromARGB(255, 75, 74, 74),),
+                              SizedBox(width: 10,),
+                              Text(
+                                enLang ? "Sign up for Apple coming soon!" : "Daftar dengan Apple segerah hadir!"
+                              ),
+                            ]
+                            ),
+                            duration: Duration(seconds: 3),
+                            backgroundColor: Colors.deepOrangeAccent,
+                            behavior: SnackBarBehavior.floating,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            margin: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                          ); ScaffoldMessenger.of(context).showSnackBar(snackbar);
+                          },
+                          icon: Image.network(
+                            'https://cdn-icons-png.flaticon.com/128/0/747.png',
+                              width: 25,
+                              height: 25,
                           ),
                         ),
                       ),
