@@ -19,9 +19,29 @@ class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController _passwordController = TextEditingController();
   bool _isObscure = true;
 
-  void _login() {
+
+  void _showBanner(String message){
+    ScaffoldMessenger.of(context).clearMaterialBanners();
+    final banner = MaterialBanner(
+      content: Text(message),
+      leading: Icon(Icons.error_outline, color: Colors.red,), 
+      backgroundColor: Colors.blueGrey,
+      actions: [
+        TextButton(
+          onPressed: (){
+            ScaffoldMessenger.of(context).clearMaterialBanners();
+          }, 
+          child: Text("DISMISS", style: TextStyle(color: Colors.amber),)
+        ),
+      ],
+      padding: EdgeInsets.all(16),
+      );
+      ScaffoldMessenger.of(context).showMaterialBanner(banner);
+  }
+
+  void _login(){
     final englishMode = Provider.of<LanguageProv>(context, listen: false).currentLanguage == "en";
-    final user = Provider.of<User>(context, listen: false);
+    final userProvider= Provider.of<User>(context, listen: false);
     String email = _emailController.text;
     String password = _passwordController.text;
 
@@ -44,12 +64,28 @@ class _LoginScreenState extends State<LoginScreen> {
         );
         ScaffoldMessenger.of(context).showSnackBar(snackBar);
         return;
-      } else {
+      } 
+
+      List<dynamic> matchUser = userProvider.usersData.where((user) => user[0]== email).toList();
+
+      if (matchUser.isEmpty){
+        _showBanner(englishMode ? "Email not found" : "Email tidak ditemukan");
+        return;
+      }
+
+      List<dynamic> matchUserlist = matchUser.first;
+      int userIndex = userProvider.usersData.indexOf(matchUserlist);
+      userProvider.currentUser = [userIndex, matchUserlist];
+
+      if (matchUserlist[2].toString() == password){
         Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (context) => HomePage()),);
+      } else {
+        _showBanner(englishMode? "Incorrect Password" : "Password salah");
       }
-       user.getUserLogin(email);
+
+
   }
   
 
