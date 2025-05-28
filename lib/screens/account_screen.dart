@@ -34,13 +34,13 @@ class AccountScreen extends StatelessWidget {
     final enLang = languageProvider.currentLanguage == "en" ? true : false;
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text(enLang ? "Account Info" : "Info Akun"),
-        titleTextStyle: const TextStyle(color: Colors.white, fontSize: 20),
-        iconTheme: const IconThemeData(color: Colors.white),
-      ),
+      // appBar: AppBar(
+      //   title: Text(enLang ? "Account Info" : "Info Akun"),
+      //   titleTextStyle: const TextStyle(color: Colors.white, fontSize: 20),
+      //   iconTheme: const IconThemeData(color: Colors.white),
+      // ),
       body: Padding(
-        padding: const EdgeInsets.fromLTRB(20,2,20,2),
+        padding: const EdgeInsets.fromLTRB(20, 2, 20, 2),
         child: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -49,14 +49,7 @@ class AccountScreen extends StatelessWidget {
                 child: CircleAvatar(
                   radius: 60,
                   backgroundColor: theme ? Colors.amber : Colors.grey,
-                  child: Text(
-                    data[1][0].toString().toUpperCase(),
-                    style: TextStyle(
-                      color: theme ? Colors.black : Colors.white,
-                      fontSize: 50,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
+                  backgroundImage: NetworkImage("https://picsum.photos/200"),
                 ),
               ),
               const SizedBox(height: 20),
@@ -90,11 +83,65 @@ class AccountScreen extends StatelessWidget {
                 width: double.infinity,
                 child: ElevatedButton.icon(
                   onPressed: () {
-                    userProvider.currentUser = [];
-                    Navigator.pushAndRemoveUntil(
-                      context,
-                      MaterialPageRoute(builder: (_) => const LoginScreen()),
-                      (route) => false,
+                    showDialog(
+                      context: context,
+                      builder:
+                          (context) => AlertDialog(
+                            title: Text(
+                              enLang ? "Confirm Logout" : "Konfirmasi Keluar",
+                              style: TextStyle(
+                                color: theme ? Colors.white : Colors.black,
+                              ),
+                            ),
+                            content: Text(
+                              enLang
+                                  ? "Are you sure you want to logout?"
+                                  : "Apakah Anda yakin ingin keluar?",
+                              style: TextStyle(
+                                color: theme ? Colors.white : Colors.black,
+                              ),
+                            ),
+                            actions: [
+                              TextButton(
+                                onPressed: () => Navigator.pop(context),
+                                child: Text(enLang ? "Cancel" : "Batal"),
+                              ),
+                              TextButton(
+                                onPressed: () {
+                                  userProvider.currentUser = [];
+                                  Navigator.pop(context);
+                                  // menampilkan snackbar setelah logout
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                      content: Text(
+                                        enLang
+                                            ? "Logged Out Successfully"
+                                            : "Beerhasil Keluar",
+                                        style: TextStyle(
+                                          color:
+                                              theme
+                                                  ? Colors.black
+                                                  : Colors.black,
+                                        ),
+                                      ),
+                                      backgroundColor:
+                                          theme ? Colors.white : Colors.black,
+                                      duration: const Duration(seconds: 2),
+                                    ),
+                                  );
+                                  // navigasi ke loginscreen
+                                  Navigator.pushAndRemoveUntil(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (_) => const LoginScreen(),
+                                    ),
+                                    (route) => false,
+                                  );
+                                },
+                                child: Text(enLang ? "Logout" : "Keluar"),
+                              ),
+                            ],
+                          ),
                     );
                   },
                   style: ElevatedButton.styleFrom(
@@ -104,7 +151,7 @@ class AccountScreen extends StatelessWidget {
                   icon: const Icon(Icons.logout),
                   label: Text(
                     enLang ? "Logout" : "Keluar",
-                    style: TextStyle(fontSize: 16),
+                    style: const TextStyle(fontSize: 16),
                   ),
                 ),
               ),

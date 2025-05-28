@@ -18,9 +18,6 @@ class _HomePageState extends State<HomePage> {
   List<dynamic> popularMovies = [];
   List<dynamic> topRatedMovies = [];
   List<dynamic> upcomingMovies = [];
-  TextEditingController _searchCtr = TextEditingController();
-  String _searchTextField = "";
-  String _selectedLanguage = 'en';
 
   @override
   void initState() {
@@ -53,145 +50,7 @@ class _HomePageState extends State<HomePage> {
     final enLang = languageProvider.currentLanguage == "en" ? true : false;
 
     return Scaffold(
-      appBar: AppBar(
-        leading: Builder(
-          builder:
-              (context) => IconButton(
-                onPressed: () => Scaffold.of(context).openDrawer(),
-                icon: Icon(Icons.menu),
-              ),
-        ),
-        title: Text("MovieFy"),
-        actions: [
-          SizedBox(
-            width: 130,
-            height: 40,
-            child: TextField(
-              onChanged: (value) {
-                setState(() {
-                  _searchTextField = value;
-                });
-              },
-              controller: _searchCtr,
-              textAlignVertical: TextAlignVertical.center,
-              decoration: InputDecoration(
-                hintText: enLang ? "Search movie" : "Cari film",
-                filled: true,
-                fillColor: Color(0xFFCCD0CF),
-                hintStyle: TextStyle(
-                  color: const Color.fromARGB(255, 117, 117, 117),
-                ),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10),
-                  borderSide: BorderSide.none,
-                ),
-                contentPadding: EdgeInsets.symmetric(
-                  vertical: 10,
-                  horizontal: 10,
-                ),
-              ),
-            ),
-          ),
-          IconButton(onPressed: () {}, icon: Icon(Icons.search)),
-        ],
-      ),
-      drawer: Drawer(
-        width: 225,
-        child: ListView(
-          padding: EdgeInsets.fromLTRB(0, 40, 0, 0),
-          children: [
-            Container(
-              padding: EdgeInsets.all(16),
-              color: theme ? Color.fromARGB(255, 25, 24, 25) : Colors.blueGrey,
-              child: InkWell(
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => AccountScreen()),
-                  );
-                },
-                child: Row(
-                  children: [
-                    CircleAvatar(
-                      radius: 14,
-                      backgroundColor: Colors.white,
-                      child: Text(
-                        user[1][0].toUpperCase(),
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 14,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
-                    SizedBox(width: 10),
-                    Text(
-                      user[1],
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-            Divider(
-              color: const Color.fromARGB(255, 80, 80, 80),
-              thickness: 1,
-              height: 1,
-            ),
-            ListTile(
-              leading: Icon(Icons.language),
-              title: DropdownButton<String>(
-                value: _selectedLanguage,
-                items: [
-                  DropdownMenuItem(
-                    value: 'en',
-                    child: Text(
-                      'English',
-                      style: Theme.of(context).textTheme.titleSmall,
-                    ),
-                  ),
-                  DropdownMenuItem(
-                    value: 'in',
-                    child: Text(
-                      'Indonesian',
-                      style: Theme.of(context).textTheme.titleSmall,
-                    ),
-                  ),
-                ],
-                onChanged: (value) {
-                  setState(() {
-                    _selectedLanguage = value!;
-                    languageProvider.changeLanguage(value);
-                  });
-                },
-                isExpanded: true,
-                underline: SizedBox(),
-              ),
-            ),
-            SwitchListTile(
-              title: Text(
-                enLang ? 'Theme' : "Tema",
-                style: Theme.of(context).textTheme.titleSmall,
-              ),
-              secondary: Icon(
-                themeProvider.isDarkMode ? Icons.dark_mode : Icons.light_mode,
-              ),
-              value: themeProvider.isDarkMode,
-              onChanged: (val) {
-                setState(() {
-                  themeProvider.toggleTheme();
-                });
-              },
-              activeColor: Colors.amber,
-              inactiveThumbColor: Colors.grey,
-            ),
-          ],
-        ),
-      ),
+      floatingActionButton: FloatingActionButton(onPressed: (){},child: Icon(Icons.search),backgroundColor: Colors.amber,),
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -325,8 +184,8 @@ class _HomePageState extends State<HomePage> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(enLang?
-                      "Top Rated Movie":"Film Nilai Tertinggi",
+                    Text(
+                      enLang ? "Top Rated Movie" : "Film Nilai Tertinggi",
                       style: Theme.of(context).textTheme.titleMedium,
                     ),
                     Icon(
@@ -440,8 +299,8 @@ class _HomePageState extends State<HomePage> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(enLang?
-                      "Upcoming Movie":"Film Mendatang",
+                    Text(
+                      enLang ? "Upcoming Movie" : "Film Mendatang",
                       style: Theme.of(context).textTheme.titleMedium,
                     ),
                     Icon(

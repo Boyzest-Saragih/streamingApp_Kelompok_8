@@ -11,11 +11,11 @@ class User with ChangeNotifier {
     usersData.add([email, username, password]);
   }
 
-  void getUserLogin(email) {
+   getUserLogin(email) {
     final user = usersData.firstWhere((user) => user[0] == email);
     final userIdx = usersData.indexWhere((user) => user[0] == email);
     currentUser = [userIdx,user];
-    print(currentUser);
+    return user;
   }
 
   void addUserData(userIdx, jenisKelamin,genres) {

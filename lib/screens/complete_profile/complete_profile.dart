@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_fe/provider/language.dart';
 import 'package:flutter_fe/provider/user.dart';
+import 'package:flutter_fe/screens/drawer.dart';
 import 'package:flutter_fe/screens/home_screen.dart';
 import 'package:provider/provider.dart';
 
@@ -41,10 +42,6 @@ class _CompleteProfileState extends State<CompleteProfile> {
   final List<String> genderOptions = [
     'Male',
     'Female',
-    'Non-binary',
-    'Bebek',
-    'Mie Ayam',
-    'Prefer not to say',
   ];
 
   List<String> selectedGenres = [];
@@ -52,14 +49,77 @@ class _CompleteProfileState extends State<CompleteProfile> {
 
   void completeProfileButton() {
     final user = Provider.of<User>(context, listen: false);
-    if (selectedGender!.isNotEmpty && selectedGender!.isNotEmpty) {
-      user.addUserData(user.currentUser[0], selectedGender, selectedGenres);
-      user.getUserLogin(user.currentUser[1][0]);
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => HomePage()),
+    final languageProvider = Provider.of<LanguageProv>(context, listen: false);
+    final enLang = languageProvider.currentLanguage == "en";
+
+    final genreValid = selectedGenres.length >= 3;
+    final genderValid = selectedGender != null;
+
+    if (!genreValid && !genderValid) {
+      showDialog(
+        context: context,
+        builder: (_) => AlertDialog(
+          title: Text(
+            enLang ? "Incomplete Selection" : "Pilihan Belum Lengkap",
+            style: TextStyle(color: Colors.amber),
+          ),
+          content: Text(enLang
+              ? "Please select at least 3 genres and your gender."
+              : "Silakan pilih minimal 3 genre dan jenis kelamin Anda."),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: const Text("OK"),
+            ),
+          ],
+        ),
       );
+      return;
     }
+
+    if (!genreValid) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            enLang ? "Please select at least 3 genres" : "Pilih minimal 3 genre",
+            style: const TextStyle(fontWeight: FontWeight.bold),
+          ),
+          backgroundColor: Colors.red,
+          duration: const Duration(seconds: 2),
+        ),
+      );
+      return;
+    }
+
+    if (!genderValid) {
+      showDialog(
+        context: context,
+        builder: (_) => AlertDialog(
+          title: Text(
+            enLang ? "Missing Gender" : "Gender Belum Dipilih",
+            style: TextStyle(color: Colors.amber),
+          ),
+          content: Text(enLang
+              ? "Please select your gender"
+              : "Silakan pilih jenis kelamin Anda."),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: const Text("OK"),
+            ),
+          ],
+        ),
+      );
+      return;
+    }
+
+    user.addUserData(user.currentUser[0], selectedGender, selectedGenres);
+    user.getUserLogin(user.currentUser[1][0]);
+
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => drawerCreen()),
+    );
   }
 
   @override
@@ -82,59 +142,55 @@ class _CompleteProfileState extends State<CompleteProfile> {
             Wrap(
               spacing: 8,
               runSpacing: 8,
-              children:
-                  movieGenres.map((genre) {
-                    return FilterChip(
-                      label: Text(genre),
-                      selected: selectedGenres.contains(genre),
-                      onSelected: (bool selected) {
-                        setState(() {
-                          if (selected) {
-                            selectedGenres.add(genre);
-                          } else {
-                            selectedGenres.remove(genre);
-                          }
-                        });
-                      },
-                      selectedColor: Colors.amber.withOpacity(0.2),
-                      checkmarkColor: Colors.amber,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20),
-                        side: BorderSide(
-                          color:
-                              selectedGenres.contains(genre)
-                                  ? Colors.amber
-                                  : Colors.grey,
-                        ),
-                      ),
-                    );
-                  }).toList(),
+              children: movieGenres.map((genre) {
+                return FilterChip(
+                  avatar: const Icon(Icons.movie, size: 18),
+                  label: Text(genre),
+                  selected: selectedGenres.contains(genre),
+                  onSelected: (bool selected) {
+                    setState(() {
+                      if (selected) {
+                        selectedGenres.add(genre);
+                      } else {
+                        selectedGenres.remove(genre);
+                      }
+                    });
+                  },
+                  selectedColor: Colors.amber.withOpacity(0.2),
+                  checkmarkColor: Colors.amber,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20),
+                    side: BorderSide(
+                      color: selectedGenres.contains(genre)
+                          ? Colors.amber
+                          : Colors.grey,
+                    ),
+                  ),
+                );
+              }).toList(),
             ),
             const SizedBox(height: 40),
             const Divider(),
             const SizedBox(height: 20),
             Text(enLang ? "Select your gender" : "Pilih jenis kelamin Anda"),
             Column(
-              children:
-                  genderOptions.map((gender) {
-                    return RadioListTile(
-                      title: Text(gender),
-                      value: gender,
-                      groupValue: selectedGender,
-                      onChanged: (String? value) {
-                        setState(() {
-                          selectedGender = value;
-                        });
-                      },
-                      activeColor: Colors.amber,
-                    );
-                  }).toList(),
+              children: genderOptions.map((gender) {
+                return RadioListTile(
+                  title: Text(gender),
+                  value: gender,
+                  groupValue: selectedGender,
+                  onChanged: (String? value) {
+                    setState(() {
+                      selectedGender = value;
+                    });
+                  },
+                  activeColor: Colors.amber,
+                );
+              }).toList(),
             ),
-
             const SizedBox(height: 40),
-
             ElevatedButton(
-              onPressed: selectedGender != null ? completeProfileButton : null,
+              onPressed: completeProfileButton,
               style: ElevatedButton.styleFrom(
                 minimumSize: Size(double.infinity, 50),
               ),

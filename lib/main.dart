@@ -4,6 +4,7 @@ import 'package:flutter_fe/provider/theme.dart';
 import 'package:flutter_fe/provider/user.dart';
 import 'package:flutter_fe/screens/account_screen.dart';
 import 'package:flutter_fe/screens/complete_profile/complete_profile.dart';
+import 'package:flutter_fe/screens/drawer.dart';
 import 'package:flutter_fe/screens/home_screen.dart';
 import 'package:flutter_fe/screens/register_screen.dart';
 import 'package:provider/provider.dart';
