@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_fe/provider/language.dart';
 import 'package:flutter_fe/provider/user.dart';
@@ -24,8 +26,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
   bool checkBox = false;
 
   void _register() {
-    final englishMode = Provider.of<LanguageProv>(context, listen: false).currentLanguage == "en";
-    final user = Provider.of<User>(context, listen: false);
+    final englishMode =
+        Provider.of<LanguageProv>(context, listen: false).currentLanguage ==
+        "en";
+    final user = Provider.of<UserProvider>(context, listen: false);
     String email = _emailController.text;
     String username = _usernameController.text;
     String password = _passwordController.text;
@@ -33,123 +37,142 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
     String? errorMessage;
 
-    if (email.isEmpty){
-      errorMessage = englishMode ? "Please enter your email" : "Silahkan isi email anda";
-    } else if (username.isEmpty){
-      errorMessage = englishMode ? "Please enter your username" : "Silahkan isi nama pengguna anda";
-    } else if (password.isEmpty){
-      errorMessage = englishMode ? "Please enter your password" : "Silahkan isi kata sandi anda";
-    } else if (confirmPassword.isEmpty){
-      errorMessage = englishMode ? "Please confirm your password" : "Silahkan konfirmasi kata sandi anda";
-    } else if (password != confirmPassword){
-      errorMessage = englishMode ? "Password do not match" : "Kata sandi tidak cocok";
+    if (email.isEmpty) {
+      errorMessage =
+          englishMode ? "Please enter your email" : "Silahkan isi email anda";
+    } else if (username.isEmpty) {
+      errorMessage =
+          englishMode
+              ? "Please enter your username"
+              : "Silahkan isi nama pengguna anda";
+    } else if (password.isEmpty) {
+      errorMessage =
+          englishMode
+              ? "Please enter your password"
+              : "Silahkan isi kata sandi anda";
+    } else if (confirmPassword.isEmpty) {
+      errorMessage =
+          englishMode
+              ? "Please confirm your password"
+              : "Silahkan konfirmasi kata sandi anda";
+    } else if (password != confirmPassword) {
+      errorMessage =
+          englishMode ? "Password do not match" : "Kata sandi tidak cocok";
     }
 
-
-    if (errorMessage != null){
+    if (errorMessage != null) {
       final snackBar = SnackBar(
         content: Row(
           children: [
-            Icon(Icons.error_outline, color: Colors.white,),
-            SizedBox(width: 10,),
+            Icon(Icons.error_outline, color: Colors.white),
+            SizedBox(width: 10),
             Expanded(child: Text(errorMessage)),
           ],
         ),
         backgroundColor: Colors.grey,
         behavior: SnackBarBehavior.floating,
         duration: Duration(seconds: 4),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12),
-        ),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
         margin: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
       );
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
       return;
-      }
-      _showConfirmationDialog(email, username, password);
     }
+    _showConfirmationDialog(email, username, password);
+  }
 
-    void _showConfirmationDialog(String email, String username, String password){
-      final englishMode = Provider.of<LanguageProv>(context, listen: false).currentLanguage == "en";
-      final user = Provider.of<User>(context, listen: false);
+  void _showConfirmationDialog(String email, String username, String password) {
+    final englishMode =
+        Provider.of<LanguageProv>(context, listen: false).currentLanguage ==
+        "en";
+    final user = Provider.of<UserProvider>(context, listen: false);
 
-      showDialog(
-        context: context, 
-        builder: (BuildContext context) {
-          return AlertDialog(
-            shape: RoundedRectangleBorder( borderRadius: BorderRadius.circular(20)),
-            contentPadding: EdgeInsets.symmetric(horizontal: 24, vertical: 20),
-            title: Text( englishMode ? "Confirm Email?" : "Konfirmasi Email?", style: TextStyle(color: Colors.grey)),
-            content: SizedBox(
-              width: 150,
-              height: 50,
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                   Text(englishMode? "Is Your Email Correct?" : "Apakah Email Anda sudah benar?" ),
-                   Text(" $email")
-                ],
-              ),
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+          ),
+          contentPadding: EdgeInsets.symmetric(horizontal: 24, vertical: 20),
+          title: Text(
+            englishMode ? "Confirm Email?" : "Konfirmasi Email?",
+            style: TextStyle(color: Colors.grey),
+          ),
+          content: SizedBox(
+            width: 150,
+            height: 50,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  englishMode
+                      ? "Is Your Email Correct?"
+                      : "Apakah Email Anda sudah benar?",
+                ),
+                Text(" $email"),
+              ],
             ),
-            actions: [
-              TextButton(
-                onPressed: (){
-                  Navigator.of(context).pop();
-                },
-                child: Text( englishMode ? "No" : "Tidak"),),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text(englishMode ? "No" : "Tidak"),
+            ),
 
-              ElevatedButton(
-                onPressed: (){
-                  Navigator.of(context).pop();
-                  user.addUser(email, username, password);
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => CompleteProfile()),
-                  );
-                  user.getUserLogin(email);
+            ElevatedButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+                user.addUser(
+                  email: email,
+                  username: username,
+                  password: password,
+                  gender: "",
+                  genres: [""],
+                );
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => CompleteProfile()),
+                );
+                user.getUserLogin(email);
+              },
+              child: Text(englishMode ? "Yes" : "Ya"),
+            ),
+          ],
+          backgroundColor: Color(0xFF11212D),
+        );
+      },
+    );
+  }
 
+  // if (email.isNotEmpty &&
+  //     username.isNotEmpty &&
+  //     password.isNotEmpty &&
+  //     password == confirmPassword) {
+  //   user.addUser(email, username, password);
+  //   Navigator.push(
+  //     context,
+  //     MaterialPageRoute(builder: (context) => CompleteProfile()),
+  //   );
+  // } else {
+  //   final snackBar = SnackBar(
+  //     content: Row(
+  //       children: [
+  //         Icon(Icons.warning, color:  Colors.white),
+  //         SizedBox(width: 10,),
+  //         Expanded(child: Text("Isi Semua Data "))
 
-                }, 
-                child: Text( englishMode ? "Yes" : "Ya"),),
-            ],
-            backgroundColor: Color(0xFF11212D),
-          );
-        });
-      
-    }
-    
-    
-    
+  //       ],
+  //     ),
+  //     behavior: SnackBarBehavior.floating,
+  //     duration: Duration(seconds: 3),
+  //   );
+  //   ScaffoldMessenger.of(context).showSnackBar(snackBar);
+  // }
 
-    // if (email.isNotEmpty &&
-    //     username.isNotEmpty &&
-    //     password.isNotEmpty &&
-    //     password == confirmPassword) {
-    //   user.addUser(email, username, password);
-    //   Navigator.push(
-    //     context,
-    //     MaterialPageRoute(builder: (context) => CompleteProfile()),
-    //   );
-    // } else {
-    //   final snackBar = SnackBar(
-    //     content: Row(
-    //       children: [
-    //         Icon(Icons.warning, color:  Colors.white),
-    //         SizedBox(width: 10,),
-    //         Expanded(child: Text("Isi Semua Data "))
-
-    //       ],
-    //     ),
-    //     behavior: SnackBarBehavior.floating,
-    //     duration: Duration(seconds: 3),
-    //   );
-    //   ScaffoldMessenger.of(context).showSnackBar(snackBar);
-    // }
-
-    // user.getUserLogin(email);
-  
-
-  
+  // user.getUserLogin(email);
 
   @override
   Widget build(BuildContext context) {
@@ -324,13 +347,19 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       child: IconButton(
                         onPressed: () {
                           final snackbar = SnackBar(
-                            content: Row( children: [
-                              Icon(Icons.notifications_active,color: const Color.fromARGB(255, 75, 74, 74),),
-                              SizedBox(width: 10,),
-                              Text(
-                                enLang ? "Sign up for Google coming soon!" : "Daftar dengan Goggle segerah hadir!"
-                              ),
-                            ]
+                            content: Row(
+                              children: [
+                                Icon(
+                                  Icons.notifications_active,
+                                  color: const Color.fromARGB(255, 75, 74, 74),
+                                ),
+                                SizedBox(width: 10),
+                                Text(
+                                  enLang
+                                      ? "Sign up for Google coming soon!"
+                                      : "Daftar dengan Goggle segerah hadir!",
+                                ),
+                              ],
                             ),
                             duration: Duration(seconds: 3),
                             backgroundColor: Colors.deepOrangeAccent,
@@ -338,8 +367,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(12),
                             ),
-                            margin: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                          ); ScaffoldMessenger.of(context).showSnackBar(snackbar);
+                            margin: EdgeInsets.symmetric(
+                              horizontal: 20,
+                              vertical: 10,
+                            ),
+                          );
+                          ScaffoldMessenger.of(context).showSnackBar(snackbar);
                         },
                         icon: Image.network(
                           'https://cdn-icons-png.flaticon.com/128/281/281764.png',
@@ -358,13 +391,19 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       child: IconButton(
                         onPressed: () {
                           final snackbar = SnackBar(
-                            content: Row( children: [
-                              Icon(Icons.notifications_active,color: const Color.fromARGB(255, 75, 74, 74),),
-                              SizedBox(width: 10,),
-                              Text(
-                                enLang ? "Sign up for Facebook coming soon!" : "Daftar dengan Facebook segerah hadir!"
-                              ),
-                            ]
+                            content: Row(
+                              children: [
+                                Icon(
+                                  Icons.notifications_active,
+                                  color: const Color.fromARGB(255, 75, 74, 74),
+                                ),
+                                SizedBox(width: 10),
+                                Text(
+                                  enLang
+                                      ? "Sign up for Facebook coming soon!"
+                                      : "Daftar dengan Facebook segerah hadir!",
+                                ),
+                              ],
                             ),
                             duration: Duration(seconds: 3),
                             backgroundColor: Colors.deepOrangeAccent,
@@ -372,8 +411,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(12),
                             ),
-                            margin: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                          ); ScaffoldMessenger.of(context).showSnackBar(snackbar);
+                            margin: EdgeInsets.symmetric(
+                              horizontal: 20,
+                              vertical: 10,
+                            ),
+                          );
+                          ScaffoldMessenger.of(context).showSnackBar(snackbar);
                         },
                         icon: Image.network(
                           'https://cdn-icons-png.flaticon.com/128/5968/5968764.png',
@@ -392,13 +435,19 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       child: IconButton(
                         onPressed: () {
                           final snackbar = SnackBar(
-                            content: Row( children: [
-                              Icon(Icons.notifications_active,color: const Color.fromARGB(255, 75, 74, 74),),
-                              SizedBox(width: 10,),
-                              Text(
-                                enLang ? "Sign up for Apple coming soon!" : "Daftar dengan Apple segerah hadir!"
-                              ),
-                            ]
+                            content: Row(
+                              children: [
+                                Icon(
+                                  Icons.notifications_active,
+                                  color: const Color.fromARGB(255, 75, 74, 74),
+                                ),
+                                SizedBox(width: 10),
+                                Text(
+                                  enLang
+                                      ? "Sign up for Apple coming soon!"
+                                      : "Daftar dengan Apple segerah hadir!",
+                                ),
+                              ],
                             ),
                             duration: Duration(seconds: 3),
                             backgroundColor: Colors.deepOrangeAccent,
@@ -406,8 +455,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(12),
                             ),
-                            margin: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                          ); ScaffoldMessenger.of(context).showSnackBar(snackbar);
+                            margin: EdgeInsets.symmetric(
+                              horizontal: 20,
+                              vertical: 10,
+                            ),
+                          );
+                          ScaffoldMessenger.of(context).showSnackBar(snackbar);
                         },
                         icon: Image.network(
                           'https://cdn-icons-png.flaticon.com/128/0/747.png',

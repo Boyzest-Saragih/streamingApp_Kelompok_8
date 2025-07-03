@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_fe/provider/language.dart';
 import 'package:flutter_fe/provider/theme.dart';
-import 'package:flutter_fe/provider/user.dart';
-import 'package:flutter_fe/screens/account_screen.dart';
+import 'package:flutter_fe/screens/searchScreen.dart';
 import 'package:flutter_fe/screens/watch_screen.dart';
 import 'package:provider/provider.dart';
 import '../utils/api.dart';
@@ -44,13 +43,13 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     final themeProvider = Provider.of<ThemeProv>(context);
     final theme = themeProvider.isDarkMode;
-    final users = Provider.of<User>(context);
-    final user = users.currentUser[1];
     final languageProvider = Provider.of<LanguageProv>(context);
     final enLang = languageProvider.currentLanguage == "en" ? true : false;
 
     return Scaffold(
-      floatingActionButton: FloatingActionButton(onPressed: (){},child: Icon(Icons.search),backgroundColor: Colors.amber,),
+      floatingActionButton: FloatingActionButton(onPressed: (){
+        Navigator.push(context, MaterialPageRoute(builder: (context)=>Searchscreen()));
+      },child: Icon(Icons.search),backgroundColor: Colors.amber,),
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -98,12 +97,7 @@ class _HomePageState extends State<HomePage> {
                                 MaterialPageRoute(
                                   builder:
                                       (context) => WatchPage(
-                                        titleMovie:
-                                            popularMovies[index]['title'],
-                                        descMovie:
-                                            popularMovies[index]['overview'],
-                                        releaseDateMovie:
-                                            popularMovies[index]['release_date'],
+                                        idMovie: popularMovies[index]["id"].toString()
                                       ),
                                 ),
                               );
@@ -214,12 +208,7 @@ class _HomePageState extends State<HomePage> {
                                 MaterialPageRoute(
                                   builder:
                                       (context) => WatchPage(
-                                        titleMovie:
-                                            topRatedMovies[index]['title'],
-                                        descMovie:
-                                            topRatedMovies[index]['overview'],
-                                        releaseDateMovie:
-                                            topRatedMovies[index]['release_date'],
+                                        idMovie: topRatedMovies[index]["id"].toString(),
                                       ),
                                 ),
                               );
@@ -329,12 +318,7 @@ class _HomePageState extends State<HomePage> {
                                 MaterialPageRoute(
                                   builder:
                                       (context) => WatchPage(
-                                        titleMovie:
-                                            upcomingMovies[index]['title'],
-                                        descMovie:
-                                            upcomingMovies[index]['overview'],
-                                        releaseDateMovie:
-                                            upcomingMovies[index]['release_date'],
+                                        idMovie: upcomingMovies[index]["id"].toString()
                                       ),
                                 ),
                               );

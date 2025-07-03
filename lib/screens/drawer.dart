@@ -26,8 +26,8 @@ class _drawerCreenState extends State<drawerCreen> {
   Widget build(BuildContext context) {
     final themeProvider = Provider.of<ThemeProv>(context);
     final theme = themeProvider.isDarkMode;
-    final users = Provider.of<User>(context);
-    final user = users.currentUser[1];
+    final users = Provider.of<UserProvider>(context);
+    final user = users.currentUser;
     final languageProvider = Provider.of<LanguageProv>(context);
     final enLang = languageProvider.currentLanguage == "en" ? true : false;
     return Scaffold(
@@ -55,8 +55,8 @@ class _drawerCreenState extends State<drawerCreen> {
               currentAccountPicture: CircleAvatar(
                 backgroundImage: NetworkImage("https://picsum.photos/200"),
               ),
-              accountName: Text(user[1]),
-              accountEmail: Text(user[0]),
+              accountName: Text(user!.username),
+              accountEmail: Text(user!.email),
             ),
 
             ListTile(

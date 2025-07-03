@@ -10,7 +10,6 @@ final urlTopRatedMovie = Uri.parse(
 final urlUpcomingMovie = Uri.parse(
   "https://api.themoviedb.org/3/movie/upcoming",
 );
-final urlMovieDetail = Uri.parse("https://api.themoviedb.org/3/movie/");
 final headers = {
   'Authorization': 'Bearer $token',
   'Content-Type': 'application/json',
@@ -69,7 +68,10 @@ Future<dynamic> getUpcomingMovies() async {
 
 Future<dynamic> getDetailMovie(movieId) async {
   try {
-    final response = await http.get(urlMovieDetail, headers: headers);
+    final response = await http.get(
+      Uri.parse('https://api.themoviedb.org/3/movie/${movieId}'),
+      headers: headers,
+    );
     if (response.statusCode == 200) {
       final data = jsonDecode(response.body);
       return data;
@@ -84,7 +86,51 @@ Future<dynamic> getDetailMovie(movieId) async {
   }
 }
 
+Future<dynamic> getMovieVideo(movieId) async {
+  try {
+    final response = await http.get(
+      Uri.parse('https://api.themoviedb.org/3/movie/${movieId}/videos'),
+      headers: headers,
+    );
+    if (response.statusCode == 200) {
+      final data = jsonDecode(response.body);
+      return data;
+    } else {
+      print('Status Code: ${response.statusCode}');
+      print('Error Response: ${response.body}');
+      return null;
+    }
+  } catch (e) {
+    print('Error : $e');
+    return null;
+  }
+}
+
+Future<dynamic> getMoviesBySearch(search) async {
+  try {
+    final url = Uri.https("api.themoviedb.org", "/3/search/movie", {
+      'query': search,
+    });
+    final response = await http.get(url, headers: headers);
+
+    if (response.statusCode == 200) {
+      final data = jsonDecode(response.body);
+      return data;
+    } else {
+      print(response.statusCode);
+      return null;
+    }
+  } catch (e) {
+    print('Error : $e');
+    return null;
+  }
+}
+
 const String imageBaseUrl = "https://image.tmdb.org/t/p/";
-String getImageUrl(String path, {String size = "w500"}) {
-  return "$imageBaseUrl$size$path";
+String getImageUrl(dynamic path, {String size = "w500"}) {
+  print("$imageBaseUrl$size$path");
+  if (path != null && path.isNotEmpty) {
+    return "$imageBaseUrl$size$path";
+  }
+  return "https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/No-Image-Placeholder.svg/640px-No-Image-Placeholder.svg.png";
 }

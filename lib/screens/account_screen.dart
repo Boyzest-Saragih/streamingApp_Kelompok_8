@@ -11,34 +11,17 @@ class AccountScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final userProvider = Provider.of<User>(context);
+    final userProvider = Provider.of<UserProvider>(context);
     final themeProvider = Provider.of<ThemeProv>(context);
     final user = userProvider.currentUser;
     final theme = themeProvider.isDarkMode;
 
-    // if (user.isEmpty) {
-    //   return const Scaffold(
-    //     backgroundColor: Color(0xFF06141B),
-    //     body: Center(
-    //       child: Text(
-    //         "Tidak Ada Data User",
-    //         style: TextStyle(color: Colors.white),
-    //       ),
-    //     ),
-    //   );
-    // }
-
-    final data = user[1];
+    final data = user;
 
     final languageProvider = Provider.of<LanguageProv>(context);
     final enLang = languageProvider.currentLanguage == "en" ? true : false;
-
+    print(data?.genres);
     return Scaffold(
-      // appBar: AppBar(
-      //   title: Text(enLang ? "Account Info" : "Info Akun"),
-      //   titleTextStyle: const TextStyle(color: Colors.white, fontSize: 20),
-      //   iconTheme: const IconThemeData(color: Colors.white),
-      // ),
       body: Padding(
         padding: const EdgeInsets.fromLTRB(20, 2, 20, 2),
         child: SingleChildScrollView(
@@ -53,11 +36,11 @@ class AccountScreen extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 20),
-              _buildItem(Icons.email, "Email", data[0]),
+              _buildItem(Icons.email, "Email", data!.email),
               _buildItem(
                 Icons.person,
                 enLang ? "Username" : "Nama pengguna",
-                data[1],
+                data.username,
               ),
               _buildItem(
                 Icons.lock,
@@ -67,14 +50,14 @@ class AccountScreen extends StatelessWidget {
               _buildItem(
                 Icons.wc,
                 enLang ? "Gender" : "Jenis Kelamin",
-                data[3],
+                data.gender,
               ),
               _buildItem(
                 Icons.movie_filter,
                 enLang ? "Fav Genres" : "Genre Favorit",
-                data[4] is List
-                    ? (data[4] as List).join(", ")
-                    : data[4].toString(),
+                data.genres is List
+                    ? (data.genres as List).join(", ")
+                    : data.genres.toString(),
               ),
 
               const SizedBox(height: 30),
@@ -108,9 +91,8 @@ class AccountScreen extends StatelessWidget {
                               ),
                               TextButton(
                                 onPressed: () {
-                                  userProvider.currentUser = [];
+                                  userProvider.userLogout();
                                   Navigator.pop(context);
-                                  // menampilkan snackbar setelah logout
                                   ScaffoldMessenger.of(context).showSnackBar(
                                     SnackBar(
                                       content: Text(
@@ -129,7 +111,6 @@ class AccountScreen extends StatelessWidget {
                                       duration: const Duration(seconds: 2),
                                     ),
                                   );
-                                  // navigasi ke loginscreen
                                   Navigator.pushAndRemoveUntil(
                                     context,
                                     MaterialPageRoute(

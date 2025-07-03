@@ -48,7 +48,7 @@ class _CompleteProfileState extends State<CompleteProfile> {
   String? selectedGender;
 
   void completeProfileButton() {
-    final user = Provider.of<User>(context, listen: false);
+    final user = Provider.of<UserProvider>(context, listen: false);
     final languageProvider = Provider.of<LanguageProv>(context, listen: false);
     final enLang = languageProvider.currentLanguage == "en";
 
@@ -113,8 +113,7 @@ class _CompleteProfileState extends State<CompleteProfile> {
       return;
     }
 
-    user.addUserData(user.currentUser[0], selectedGender, selectedGenres);
-    user.getUserLogin(user.currentUser[1][0]);
+    user.updateUser(user.currentUser!.email, selectedGender!, selectedGenres);
 
     Navigator.push(
       context,

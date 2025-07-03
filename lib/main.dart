@@ -7,13 +7,14 @@ import 'package:flutter_fe/screens/complete_profile/complete_profile.dart';
 import 'package:flutter_fe/screens/drawer.dart';
 import 'package:flutter_fe/screens/home_screen.dart';
 import 'package:flutter_fe/screens/register_screen.dart';
+import 'package:flutter_fe/screens/searchScreen.dart';
 import 'package:provider/provider.dart';
 
 void main() async {
   runApp(
     MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (_) => User()),
+        ChangeNotifierProvider(create: (_) => UserProvider()),
         ChangeNotifierProvider(create: (_) => ThemeProv()),
         ChangeNotifierProvider(create: (_) => LanguageProv()),
       ],
@@ -103,7 +104,7 @@ class MyApp extends StatelessWidget {
         ),
       ),
 
-      home: const RegisterScreen(),
+      home: const drawerCreen(),
     );
   }
 }
