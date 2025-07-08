@@ -48,7 +48,7 @@ class _HomePageState extends State<HomePage> {
 
     return Scaffold(
       floatingActionButton: FloatingActionButton(onPressed: (){
-        Navigator.push(context, MaterialPageRoute(builder: (context)=>Searchscreen()));
+        Navigator.push(context, MaterialPageRoute(builder: (context)=>SearchScreen()));
       },child: Icon(Icons.search),backgroundColor: Colors.amber,),
       body: SingleChildScrollView(
         child: Column(
