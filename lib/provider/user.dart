@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 class UserModel {
+  final int userId;
   final String email;
   final String username;
   final String password;
@@ -8,6 +9,7 @@ class UserModel {
   final List<String> genres;
 
   UserModel({
+    required this.userId,
     required this.email,
     required this.username,
     required this.password,
@@ -24,6 +26,7 @@ class UserProvider with ChangeNotifier {
 
    UserProvider() {
     _currentUser = UserModel(
+      userId: 0,
       email: 'dummy@dev.com',
       username: 'devUser',
       password: '123456',
@@ -42,6 +45,7 @@ class UserProvider with ChangeNotifier {
     required List<String> genres,
   }) {
     final newUser = UserModel(
+      userId: _users.length+1,
       email: email,
       username: username,
       password: password,
@@ -68,6 +72,7 @@ class UserProvider with ChangeNotifier {
     if (index != -1) {
       final old = _users[index];
       _currentUser = UserModel(
+        userId: old.userId,
         email: old.email,
         username: old.username,
         password: old.password,
