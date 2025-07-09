@@ -4,6 +4,7 @@ import 'package:flutter_fe/provider/language.dart';
 import 'package:flutter_fe/provider/theme.dart';
 import 'package:flutter_fe/provider/user.dart';
 import 'package:flutter_fe/screens/drawer.dart';
+import 'package:flutter_fe/screens/introScreen.dart';
 import 'package:provider/provider.dart';
 
 void main() async {
@@ -101,7 +102,7 @@ class MyApp extends StatelessWidget {
         ),
       ),
 
-      home: const drawerCreen(),
+      home: const Introscreen(),
     );
   }
 }

@@ -61,10 +61,7 @@ class _drawerCreenState extends State<drawerCreen> {
             ),
 
             ListTile(
-              leading: Tooltip(
-                message: enLang ? "Go to Home" : "Ke Beranda",
-                child: Icon(Icons.home),
-              ),
+              leading: Icon(Icons.home),
               title: Text("Home"),
               onTap: () {
                 setState(() {
@@ -74,10 +71,7 @@ class _drawerCreenState extends State<drawerCreen> {
               },
             ),
             ListTile(
-              leading: Tooltip(
-                message: enLang ? "View Profile" : "Lihat Profil",
-                child: Icon(Icons.account_box),
-              ),
+              leading: Icon(Icons.account_box),
               title: Text("Profile"),
               onTap: () {
                 setState(() {
@@ -88,10 +82,7 @@ class _drawerCreenState extends State<drawerCreen> {
             ),
 
             ListTile(
-              leading: Tooltip(
-                message: enLang ? "Open Settings" : "Buka Pengaturan",
-                child: Icon(Icons.settings),
-              ),
+              leading: Icon(Icons.settings),
               title: Text("Settings"),
               onTap: () {
                 setState(() {
@@ -100,7 +91,6 @@ class _drawerCreenState extends State<drawerCreen> {
                 });
               },
             ),
-
 
             ListTile(
               leading: Icon(Icons.bookmark),
@@ -118,7 +108,8 @@ class _drawerCreenState extends State<drawerCreen> {
                 enLang ? 'Theme' : "Tema",
                 style: Theme.of(context).textTheme.titleSmall,
               ),
-
+              secondary: Icon(
+                themeProvider.isDarkMode ? Icons.dark_mode : Icons.light_mode,
               ),
               value: themeProvider.isDarkMode,
               onChanged: (val) {
