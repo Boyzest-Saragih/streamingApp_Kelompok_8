@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_fe/provider/favoriteMovies.dart';
+import 'package:flutter_fe/provider/user.dart';
 import 'package:flutter_fe/utils/api.dart';
+import 'package:provider/provider.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
 class WatchPage extends StatefulWidget {
@@ -39,7 +42,7 @@ class _WatchPageState extends State<WatchPage> {
       movieVideosData = videos;
     });
 
-    _initializeVideoPlayer();
+    // _initializeVideoPlayer();
 
     setState(() => isLoading = false);
   }
@@ -51,7 +54,7 @@ class _WatchPageState extends State<WatchPage> {
       return;
     }
     print(movieVideosData!['results'][0]['key']);
-    
+
     final key = movieVideosData!['results'][0]['key'];
     videoUrl = "https://www.youtube.com/watch?v=${key}";
 
@@ -72,10 +75,45 @@ class _WatchPageState extends State<WatchPage> {
 
   @override
   Widget build(BuildContext context) {
+    final favoriteMovies = Provider.of<FavoriteMoviesProvider>(context);
+    final users = Provider.of<UserProvider>(context);
+    final user = users.currentUser;
+
     if (isLoading || _controller == null) {
       return Scaffold(
         appBar: AppBar(
           title: Text(movieData?["original_title"] ?? "Loading..."),
+          actions: [
+            IconButton(
+  onPressed: () {
+    final userId = user!.userId.toString();
+    final isFav = favoriteMovies.isFavorite(userId, widget.idMovie);
+
+    if (isFav) {
+      favoriteMovies.removeFavorite(
+        userId,
+        Movie(movieId: widget.idMovie),
+      );
+    } else {
+      favoriteMovies.addFavorite(
+        userId,
+        Movie(movieId: widget.idMovie),
+      );
+    }
+
+    setState(() {}); 
+  },
+  icon: Icon(
+    favoriteMovies.isFavorite(
+      user!.userId.toString(),
+      widget.idMovie,
+    )
+        ? Icons.bookmark_remove
+        : Icons.bookmark_add,
+  ),
+),
+
+          ],
         ),
         body: const Center(child: CircularProgressIndicator()),
       );

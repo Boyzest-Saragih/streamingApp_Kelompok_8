@@ -3,6 +3,7 @@ import 'package:flutter_fe/provider/language.dart';
 import 'package:flutter_fe/provider/theme.dart';
 import 'package:flutter_fe/provider/user.dart';
 import 'package:flutter_fe/screens/account_screen.dart';
+import 'package:flutter_fe/screens/favoriteScreen.dart';
 import 'package:flutter_fe/screens/home_screen.dart';
 import 'package:flutter_fe/screens/settings_screen.dart';
 import 'package:provider/provider.dart';
@@ -19,7 +20,7 @@ class _drawerCreenState extends State<drawerCreen> {
   String _searchTextField = "";
   String _selectedLanguage = 'en';
 
-  List<Widget> screen = [HomePage(), AccountScreen(), settingsScreen()];
+  List<Widget> screen = [HomePage(), AccountScreen(), settingsScreen(),Favoritescreen()];
   int selectScreen = 0;
 
   @override
@@ -91,53 +92,34 @@ class _drawerCreenState extends State<drawerCreen> {
               },
             ),
 
-            // ListTile(
-            //   leading: Icon(Icons.language),
-            //   title: DropdownButton<String>(
-            //     value: _selectedLanguage,
-            //     items: [
-            //       DropdownMenuItem(
-            //         value: 'en',
-            //         child: Text(
-            //           'English',
-            //           style: Theme.of(context).textTheme.titleSmall,
-            //         ),
-            //       ),
-            //       DropdownMenuItem(
-            //         value: 'in',
-            //         child: Text(
-            //           'Indonesian',
-            //           style: Theme.of(context).textTheme.titleSmall,
-            //         ),
-            //       ),
-            //     ],
-            //     onChanged: (value) {
-            //       setState(() {
-            //         _selectedLanguage = value!;
-            //         languageProvider.changeLanguage(value);
-            //       });
-            //     },
-            //     isExpanded: true,
-            //     underline: SizedBox(),
-            //   ),
-            // ),
-            // SwitchListTile(
-            //   title: Text(
-            //     enLang ? 'Theme' : "Tema",
-            //     style: Theme.of(context).textTheme.titleSmall,
-            //   ),
-            //   secondary: Icon(
-            //     themeProvider.isDarkMode ? Icons.dark_mode : Icons.light_mode,
-            //   ),
-            //   value: themeProvider.isDarkMode,
-            //   onChanged: (val) {
-            //     setState(() {
-            //       themeProvider.toggleTheme();
-            //     });
-            //   },
-            //   activeColor: Colors.amber,
-            //   inactiveThumbColor: Colors.grey,
-            // ),
+            ListTile(
+              leading: Icon(Icons.bookmark),
+              title: Text("Favorite"),
+              onTap: () {
+                setState(() {
+                  selectScreen = 3;
+                  Navigator.pop(context);
+                });
+              },
+            ),
+
+            SwitchListTile(
+              title: Text(
+                enLang ? 'Theme' : "Tema",
+                style: Theme.of(context).textTheme.titleSmall,
+              ),
+              secondary: Icon(
+                themeProvider.isDarkMode ? Icons.dark_mode : Icons.light_mode,
+              ),
+              value: themeProvider.isDarkMode,
+              onChanged: (val) {
+                setState(() {
+                  themeProvider.toggleTheme();
+                });
+              },
+              activeColor: Colors.amber,
+              inactiveThumbColor: Colors.grey,
+            ),
           ],
         ),
       ),
