@@ -131,6 +131,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   password: password,
                   gender: "",
                   genres: [""],
+                  birthDate: DateTime(2000, 1, 1),
                 );
                 Navigator.push(
                   context,

@@ -59,6 +59,12 @@ class AccountScreen extends StatelessWidget {
                     ? (data.genres as List).join(", ")
                     : data.genres.toString(),
               ),
+              _buildItem(
+                Icons.cake,
+                enLang ? "Birth Date" : "Tanggal Lahir",
+                "${data.birthDate.day}/${data.birthDate.month}/${data.birthDate.year}",
+              ),
+
 
               const SizedBox(height: 30),
 

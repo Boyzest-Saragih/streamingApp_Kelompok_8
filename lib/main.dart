@@ -1,13 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_fe/provider/favoriteMovies.dart';
 import 'package:flutter_fe/provider/language.dart';
 import 'package:flutter_fe/provider/theme.dart';
 import 'package:flutter_fe/provider/user.dart';
-import 'package:flutter_fe/screens/account_screen.dart';
-import 'package:flutter_fe/screens/complete_profile/complete_profile.dart';
 import 'package:flutter_fe/screens/drawer.dart';
-import 'package:flutter_fe/screens/home_screen.dart';
-import 'package:flutter_fe/screens/register_screen.dart';
-import 'package:flutter_fe/screens/searchScreen.dart';
 import 'package:provider/provider.dart';
 
 void main() async {
@@ -17,6 +13,7 @@ void main() async {
         ChangeNotifierProvider(create: (_) => UserProvider()),
         ChangeNotifierProvider(create: (_) => ThemeProv()),
         ChangeNotifierProvider(create: (_) => LanguageProv()),
+        ChangeNotifierProvider(create: (_)=> FavoriteMoviesProvider())
       ],
       child: const MyApp(),
     ),
