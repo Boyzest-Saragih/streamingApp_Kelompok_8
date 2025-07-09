@@ -42,7 +42,7 @@ class _WatchPageState extends State<WatchPage> {
       movieVideosData = videos;
     });
 
-    // _initializeVideoPlayer();
+    _initializeVideoPlayer();
 
     setState(() => isLoading = false);
   }
@@ -85,34 +85,43 @@ class _WatchPageState extends State<WatchPage> {
           title: Text(movieData?["original_title"] ?? "Loading..."),
           actions: [
             IconButton(
-  onPressed: () {
-    final userId = user!.userId.toString();
-    final isFav = favoriteMovies.isFavorite(userId, widget.idMovie);
+              onPressed: () {
+                final userId = user!.userId.toString();
+                final isFav = favoriteMovies.isFavorite(userId, widget.idMovie);
 
-    if (isFav) {
-      favoriteMovies.removeFavorite(
-        userId,
-        Movie(movieId: widget.idMovie),
-      );
-    } else {
-      favoriteMovies.addFavorite(
-        userId,
-        Movie(movieId: widget.idMovie),
-      );
-    }
+                if (isFav) {
+                  favoriteMovies.removeFavorite(
+                    userId,
+                    Movie(
+                      movieId: widget.idMovie,
+                      title: movieData?['title'],
+                      desc: movieData?['overview'],
+                      posterPath: movieData?['poster_path'],
+                    ),
+                  );
+                } else {
+                  favoriteMovies.addFavorite(
+                    userId,
+                    Movie(
+                      movieId: widget.idMovie,
+                      title: movieData?['title'],
+                      desc: movieData?['overview'],
+                      posterPath: movieData?['poster_path'],
+                    ),
+                  );
+                }
 
-    setState(() {}); 
-  },
-  icon: Icon(
-    favoriteMovies.isFavorite(
-      user!.userId.toString(),
-      widget.idMovie,
-    )
-        ? Icons.bookmark_remove
-        : Icons.bookmark_add,
-  ),
-),
-
+                setState(() {});
+              },
+              icon: Icon(
+                favoriteMovies.isFavorite(
+                      user!.userId.toString(),
+                      widget.idMovie,
+                    )
+                    ? Icons.bookmark_remove
+                    : Icons.bookmark_add,
+              ),
+            ),
           ],
         ),
         body: const Center(child: CircularProgressIndicator()),
