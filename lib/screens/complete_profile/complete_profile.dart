@@ -46,6 +46,22 @@ class _CompleteProfileState extends State<CompleteProfile> {
 
   List<String> selectedGenres = [];
   String? selectedGender;
+  DateTime? selectedBirthDate;
+
+  void _pickBirthDate() async {
+    final DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: DateTime(2000, 1, 1),
+      firstDate: DateTime(1900),
+      lastDate: DateTime.now(),
+    );
+    if (picked != null) {
+      setState(() {
+        selectedBirthDate = picked;
+      });
+    }
+  }
+
 
   void completeProfileButton() {
     final user = Provider.of<UserProvider>(context, listen: false);
@@ -54,8 +70,10 @@ class _CompleteProfileState extends State<CompleteProfile> {
 
     final genreValid = selectedGenres.length >= 3;
     final genderValid = selectedGender != null;
+    final birthDateValid = selectedBirthDate != null;
 
-    if (!genreValid && !genderValid) {
+
+    if (!genreValid && !genderValid && !birthDateValid) {
       showDialog(
         context: context,
         builder: (_) => AlertDialog(
@@ -64,8 +82,8 @@ class _CompleteProfileState extends State<CompleteProfile> {
             style: TextStyle(color: Colors.amber),
           ),
           content: Text(enLang
-              ? "Please select at least 3 genres and your gender."
-              : "Silakan pilih minimal 3 genre dan jenis kelamin Anda."),
+              ? "Please select at least 3 genres, gender and your birth date."
+              : "Silakan pilih minimal 3 genre, jenis kelamin dan tanggal lahir Anda."),
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context),
@@ -113,7 +131,29 @@ class _CompleteProfileState extends State<CompleteProfile> {
       return;
     }
 
-    user.updateUser(user.currentUser!.email, selectedGender!, selectedGenres);
+    if (!birthDateValid) {
+      showDialog(
+        context: context,
+        builder: (_) => AlertDialog(
+          title: Text(
+            enLang ? "Missing Birth Date" : "Tanggal Lahir Belum Dipilih",
+            style: TextStyle(color: Colors.amber),
+          ),
+          content: Text(enLang
+              ? "Please select your birth date"
+              : "Silakan pilih tanggal lahir Anda."),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: const Text("OK"),
+            ),
+          ],
+        ),
+      );
+      return;
+    }
+
+    user.updateUser(user.currentUser!.email, selectedGender!, selectedGenres, selectedBirthDate!);
 
     Navigator.push(
       context,
@@ -186,6 +226,19 @@ class _CompleteProfileState extends State<CompleteProfile> {
                   activeColor: Colors.amber,
                 );
               }).toList(),
+            ),
+            const SizedBox(height: 20),
+            Text(enLang ? "Select your birth date" : "Pilih tanggal lahir Anda"),
+            TextButton.icon(
+              onPressed: _pickBirthDate,
+              icon: const Icon(Icons.calendar_today, ),
+              label: Text(
+                selectedBirthDate == null
+                  ? (enLang ? "Pick a date" : "Pilih tanggal")
+                  : "${selectedBirthDate!.day}/${selectedBirthDate!.month}/${selectedBirthDate!.year}",
+                  selectionColor: Colors.white,
+              ),
+            
             ),
             const SizedBox(height: 40),
             ElevatedButton(
