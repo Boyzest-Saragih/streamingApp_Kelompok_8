@@ -139,11 +139,11 @@ class _settingsScreenState extends State<settingsScreen> {
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           ClipRRect(
-                            borderRadius: BorderRadius.circular(50),
+                            borderRadius: BorderRadius.circular(100),
                             child: Image.network(
-                              "https://avatars.githubusercontent.com/u/138434387?v=4",
-                              height: 100,
-                              width: 100,
+                              "https://raw.githubusercontent.com/Boyzest-Saragih/streamingApp_Kelompok_8/main/assets/IMG-20250624-WA0015.jpg",
+                              height: 200,
+                              width: 200,
                               fit: BoxFit.cover,
                             ),
                           ),
@@ -156,7 +156,7 @@ class _settingsScreenState extends State<settingsScreen> {
                             ),
                           ),
                           Text(
-                             "Team Kewek Kewek 😂",
+                             "Team Kwek Kwek😂",
                             style: TextStyle(color: Colors.grey[600]),
                             textAlign: TextAlign.center,
                           ),
