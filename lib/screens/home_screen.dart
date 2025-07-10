@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_fe/provider/language.dart';
 import 'package:flutter_fe/provider/theme.dart';
+import 'package:flutter_fe/screens/filterAllMovie.dart';
 import 'package:flutter_fe/screens/movieListScreen.dart';
 import 'package:flutter_fe/screens/searchScreen.dart';
 import 'package:flutter_fe/screens/watch_screen.dart';
@@ -18,13 +19,7 @@ class _HomePageState extends State<HomePage> {
   List<dynamic> popularMovies = [];
   List<dynamic> topRatedMovies = [];
   List<dynamic> upcomingMovies = [];
-  List<dynamic> filteredMovie = [];
-
-  bool isfiltered = false;
-
-  DateTimeRange ? pickedRange;
   
-
   @override
   void initState() {
     super.initState();
@@ -47,7 +42,6 @@ class _HomePageState extends State<HomePage> {
   }
 
 
-
   @override
   Widget build(BuildContext context) {
     final themeProvider = Provider.of<ThemeProv>(context);
@@ -63,7 +57,40 @@ class _HomePageState extends State<HomePage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const SizedBox(height: 5,),
+
+            SizedBox(),
+            
+            Padding(
+              padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+              child: TextButton(
+                onPressed: () {
+                  Navigator.push(
+                    context, 
+                    MaterialPageRoute(builder: (context) => filterAllmovie(
+                      title: enLang? "All Movie" : "Semua film", 
+                    ),),
+                  );
+                },
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Text(
+                      enLang ? "Movie" : "Film",
+                      style: Theme.of(context).textTheme.titleSmall,
+                      
+                    ),
+                    Icon(
+                      Icons.arrow_forward_ios,
+                      size: 14,
+                      color: theme ? Colors.white : Colors.black,
+                    ),
+                  ],
+                ),
+              ),
+            ),
+ 
+            const SizedBox(height: 10,),
+
             // Top List
             Padding(
               padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
