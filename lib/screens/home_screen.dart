@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_fe/provider/language.dart';
 import 'package:flutter_fe/provider/theme.dart';
+import 'package:flutter_fe/screens/filterAllMovie.dart';
 import 'package:flutter_fe/screens/movieListScreen.dart';
 import 'package:flutter_fe/screens/searchScreen.dart';
 import 'package:flutter_fe/screens/watch_screen.dart';
@@ -18,13 +19,7 @@ class _HomePageState extends State<HomePage> {
   List<dynamic> popularMovies = [];
   List<dynamic> topRatedMovies = [];
   List<dynamic> upcomingMovies = [];
-  List<dynamic> filteredMovie = [];
-
-  bool isfiltered = false;
-
-  DateTimeRange ? pickedRange;
   
-
   @override
   void initState() {
     super.initState();
@@ -46,33 +41,6 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
-  Future<void> pickDateRange() async {
-    final DateTimeRange? picked = await showDateRangePicker(
-      context: context, 
-      firstDate: DateTime(2000),
-      lastDate: DateTime.now(),
-    );
-
-    if (picked != null) {
-      final fromDate = _formatDate(picked.start); 
-      final toDate = _formatDate(picked.end); 
-
-      final result = await getMoviesByDate(fromDate, toDate);
-      if (result!= null && result["results"] != null) {
-        setState(() {
-          pickedRange = picked;
-          filteredMovie = result["results"];
-          isfiltered = true;
-        });
-      }
-    }
-  }
-
-  String _formatDate(DateTime date) {
-    return "${date.year.toString().padLeft(4, "0")}/"
-            "${date.month.toString().padLeft(2, "0")}/"
-            "${date.day.toString().padLeft(2, "0")}";
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -90,128 +58,37 @@ class _HomePageState extends State<HomePage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             SizedBox(),
-
-            const SizedBox(height: 20),
-
+            
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 10),
-              child: ElevatedButton.icon(
-                onPressed: pickDateRange, 
-                icon: Icon(Icons.date_range),
-                label: Text(
-                  pickedRange == null
-                  ? (enLang ? "Date Filter" : "Filter Tanggal")
-                  :"${_formatDate(pickedRange!.start)} - ${_formatDate(pickedRange!.end)}"
-                )
-                ),
-            ),
-
-            const SizedBox(height: 10,),
-
-            // movie date filter
-            isfiltered
-            ? Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 10),
-              child: Row(
-                children: [
-                  Expanded(child: Text( enLang? "Selected Movie" : "Film Pilihanmu",
-                    
-                        style: Theme.of(context).textTheme.titleMedium
-                          ),
-                    ),
-                  TextButton(
-                    onPressed: (){
-                      setState(() {
-                        isfiltered = false;
-                        filteredMovie = [];
-                        pickedRange = null;
-                      });
-                    }, 
-                    child: Text( enLang? "Clear" : "Hapus"))
-                ],
-              ),
-            ): const SizedBox(),
-            
-            const SizedBox(height: 10,),
-
-            isfiltered
-            ? SizedBox(
-              height: 200,
-              child: ListView.builder(
-                scrollDirection: Axis.horizontal,
-                itemBuilder: (context, index) {
-                  final movie = filteredMovie[index];
-                  return GestureDetector(
-                    onTap: (){
-                      Navigator.push(
-                        context, 
-                        MaterialPageRoute(
-                          builder: (context) => WatchPage(
-                            idMovie: movie["id"].toString()),
-                        ),
-                      );
-                    },
-                    child: Container(
-                      width: 150,
-                      margin: EdgeInsets.symmetric(horizontal: 8),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                        image: DecorationImage(
-                          image: NetworkImage(getImageUrl(movie["poster_path"])),
-                          fit: BoxFit.cover,
-                        )
-                      ),
-                      child: Column( mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          Container(
-                            alignment: Alignment.bottomCenter,
-                            height: 48,
-                            decoration: BoxDecoration(
-                              gradient: LinearGradient(
-                                begin: Alignment.bottomCenter,
-                                end: Alignment.topCenter,
-                                colors: [
-                                  Colors.black,
-                                Colors.transparent
-                                ]
-                              )
-                            ),
-                            child: Column(
-                              children: [
-                                Text(
-                                  movie["title"],
-                                  maxLines: 1,
-                                  overflow: TextOverflow.ellipsis,
-                                  style: TextStyle(color: Colors.white),
-
-                                ),
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                  const Icon(
-                                  Icons.star,
-                                  color: Colors.yellow,
-                                  size: 16,
-                                ),
-                                const SizedBox(width: 4,),
-                                Text(movie["vote_average"].toStringAsFixed(2))
-                                ],
-                                )
-                              ],
-                            ),
-                          )
-                        ],
-                      ),
-                    ),
+              padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+              child: TextButton(
+                onPressed: () {
+                  Navigator.push(
+                    context, 
+                    MaterialPageRoute(builder: (context) => filterAllmovie(
+                      title: enLang? "All Movie" : "Semua film", 
+                    ),),
                   );
-                }
-              )  
-            ) :const SizedBox(),
-            
-            isfiltered 
-            ? SizedBox(height: 40,)
-            : SizedBox.shrink(),
-
+                },
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Text(
+                      enLang ? "Movie" : "Film",
+                      style: Theme.of(context).textTheme.titleSmall,
+                      
+                    ),
+                    Icon(
+                      Icons.arrow_forward_ios,
+                      size: 14,
+                      color: theme ? Colors.white : Colors.black,
+                    ),
+                  ],
+                ),
+              ),
+            ),
+ 
+            const SizedBox(height: 10,),
 
             // Top List
             Padding(
