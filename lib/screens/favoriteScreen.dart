@@ -37,7 +37,7 @@ class _FavoritescreenState extends State<Favoritescreen> {
                     crossAxisCount: 3,
                     mainAxisSpacing: 10,
                     crossAxisSpacing: 10,
-                    childAspectRatio: 0.6,
+                    childAspectRatio: 0.8,
                   ),
                   itemCount: favorite.length,
                   itemBuilder: (context, index) {
@@ -53,36 +53,57 @@ class _FavoritescreenState extends State<Favoritescreen> {
                         );
                       },
                       child: Container(
+                        width: 150,
+                        margin: EdgeInsets.symmetric(horizontal: 8),
                         decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(8),
-                          image:
-                              movie.posterPath != null
-                                  ? DecorationImage(
-                                    image: NetworkImage(
-                                      getImageUrl(movie.posterPath),
-                                    ),
-                                    fit: BoxFit.cover,
-                                  )
-                                  : null,
-                          color: Colors.grey[300],
+                          borderRadius: BorderRadius.circular(10),
+                          image: DecorationImage(
+                            image: NetworkImage(
+                              getImageUrl(movie.posterPath),
+                            ),
+                            fit: BoxFit.cover,
+                          ),
                         ),
-                        child: Align(
-                          alignment: Alignment.bottomCenter,
-                          child: Container(
-                            padding: const EdgeInsets.all(4),
-                            decoration: BoxDecoration(
-                              color: Colors.black.withOpacity(0.5),
-                              borderRadius: const BorderRadius.vertical(
-                                bottom: Radius.circular(8),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            Container(
+                              alignment: Alignment.bottomCenter,
+                              height: 48,
+                              decoration: BoxDecoration(
+                                gradient: LinearGradient(
+                                  begin: Alignment.bottomCenter,
+                                  end: Alignment.topCenter,
+                                  colors: [Colors.black, Colors.transparent],
+                                ),
+                              ),
+                              child: Column(
+                                children: [
+                                  Text(
+                                    movie.title,
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(color: Colors.white),
+                                  ),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      const Icon(
+                                        Icons.star,
+                                        color: Colors.yellow,
+                                        size: 16,
+                                      ),
+                                      const SizedBox(width: 4),
+                                      Text(
+                                        movie.rating
+                                      ),
+                                    ],
+                                  ),
+                                ],
                               ),
                             ),
-                            child: Text(
-                              movie.title ?? 'No Title',
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                              style: const TextStyle(color: Colors.white),
-                            ),
-                          ),
+                          ],
                         ),
                       ),
                     );

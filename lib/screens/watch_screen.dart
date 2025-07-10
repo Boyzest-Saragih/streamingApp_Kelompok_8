@@ -37,12 +37,13 @@ class _WatchPageState extends State<WatchPage> {
     final detail = await detailFuture;
     final videos = await videoFuture;
 
+    print(detail);
     setState(() {
       movieData = detail;
       movieVideosData = videos;
     });
 
-    _initializeVideoPlayer();
+    // _initializeVideoPlayer();
 
     setState(() => isLoading = false);
   }
@@ -86,7 +87,7 @@ class _WatchPageState extends State<WatchPage> {
           actions: [
             IconButton(
               onPressed: () {
-                final userId = user!.userId.toString();
+                final userId = user.userId.toString();
                 final isFav = favoriteMovies.isFavorite(userId, widget.idMovie);
 
                 if (isFav) {
@@ -95,7 +96,7 @@ class _WatchPageState extends State<WatchPage> {
                     Movie(
                       movieId: widget.idMovie,
                       title: movieData?['title'],
-                      desc: movieData?['overview'],
+                      rating: movieData?['vote_average'].toStringAsFixed(2),
                       posterPath: movieData?['poster_path'],
                     ),
                   );
@@ -105,7 +106,7 @@ class _WatchPageState extends State<WatchPage> {
                     Movie(
                       movieId: widget.idMovie,
                       title: movieData?['title'],
-                      desc: movieData?['overview'],
+                      rating: movieData?['vote_average'].toStringAsFixed(2),
                       posterPath: movieData?['poster_path'],
                     ),
                   );

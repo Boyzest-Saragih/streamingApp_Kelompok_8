@@ -41,14 +41,8 @@ class _SearchScreenState extends State<SearchScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Cari Film"),backgroundColor: Colors.black,),
-      body: Padding(
-        padding: EdgeInsets.all(10),
-        child: Column(
-          children: [
-            Row(
-              children: [
-                Expanded(
+      appBar: AppBar(
+        title: Expanded(
                   child: TextField(
                     controller: _search,
                     onSubmitted: handleSearch,
@@ -79,13 +73,15 @@ class _SearchScreenState extends State<SearchScreen> {
                     ),
                   ),
                 ),
-                IconButton(
+        actions: [                IconButton(
                   icon: Icon(Icons.search),
                   onPressed: () => handleSearch(_search.text),
-                ),
-              ],
-            ),
-            Divider(),
+                ),],
+      ),
+      body: Padding(
+        padding: EdgeInsets.all(10),
+        child: Column(
+          children: [
             Expanded(
               child:
                   isLoad
@@ -97,6 +93,7 @@ class _SearchScreenState extends State<SearchScreen> {
                           crossAxisCount: 3,
                           mainAxisSpacing: 10,
                           crossAxisSpacing: 10,
+                          childAspectRatio: 0.8
                         ),
                         itemCount: movies.length,
                         itemBuilder: (context, index) {
@@ -114,8 +111,10 @@ class _SearchScreenState extends State<SearchScreen> {
                               );
                             },
                             child: Container(
+                              width: 150,
+                              margin: EdgeInsets.symmetric(horizontal: 8),
                               decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(8),
+                                borderRadius: BorderRadius.circular(10),
                                 image: DecorationImage(
                                   image: NetworkImage(
                                     getImageUrl(movie['poster_path']),
@@ -123,18 +122,51 @@ class _SearchScreenState extends State<SearchScreen> {
                                   fit: BoxFit.cover,
                                 ),
                               ),
-                              child: Align(
-                                alignment: Alignment.bottomCenter,
-                                child: Container(
-                                  padding: EdgeInsets.all(4),
-                                  color: Colors.black.withOpacity(0.5),
-                                  child: Text(
-                                    movie['title'],
-                                    maxLines: 1,
-                                    overflow: TextOverflow.ellipsis,
-                                    style: TextStyle(color: Colors.white),
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                children: [
+                                  Container(
+                                    alignment: Alignment.bottomCenter,
+                                    height: 48,
+                                    decoration: BoxDecoration(
+                                      gradient: LinearGradient(
+                                        begin: Alignment.bottomCenter,
+                                        end: Alignment.topCenter,
+                                        colors: [
+                                          Colors.black,
+                                          Colors.transparent,
+                                        ],
+                                      ),
+                                    ),
+                                    child: Column(
+                                      children: [
+                                        Text(
+                                          movie['title'],
+                                          maxLines: 1,
+                                          overflow: TextOverflow.ellipsis,
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(color: Colors.white),
+                                        ),
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            const Icon(
+                                              Icons.star,
+                                              color: Colors.yellow,
+                                              size: 16,
+                                            ),
+                                            const SizedBox(width: 4),
+                                            Text(
+                                              movie["vote_average"]
+                                                  .toStringAsFixed(2),
+                                            ),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
                                   ),
-                                ),
+                                ],
                               ),
                             ),
                           );

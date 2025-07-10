@@ -25,41 +25,6 @@ class _settingsScreenState extends State<settingsScreen> {
       Share.share("Gas Streaming di MovieFy! 🎬\n$linkApp");
     }
 
-    snackBarIsDarkMode(isDarkMode) {
-      if (isDarkMode) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            duration: Duration(seconds: 1),
-            content: Text(
-              isEnglish ? "Switch to light mode" : "Beralih ke mode terang",
-            ),
-            action: SnackBarAction(
-              label: 'Ok!',
-              onPressed: () {
-                ScaffoldMessenger.of(context).hideCurrentSnackBar();
-              },
-            ),
-          ),
-        );
-      } else {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            duration: Duration(seconds: 2),
-
-            content: Text(
-              isEnglish ? "Switch to dark mode" : "Beralih ke mode gelap😹😈",
-            ),
-            action: SnackBarAction(
-              label: 'Ok!',
-              onPressed: () {
-                ScaffoldMessenger.of(context).hideCurrentSnackBar();
-              },
-            ),
-          ),
-        );
-      }
-    }
-
     return Scaffold(
       body: ListView(
         children: [

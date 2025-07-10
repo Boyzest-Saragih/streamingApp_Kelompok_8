@@ -151,7 +151,6 @@ Future<dynamic> getMoviesByDate(String fromDate, String toDate) async{
 
 const String imageBaseUrl = "https://image.tmdb.org/t/p/";
 String getImageUrl(dynamic path, {String size = "w500"}) {
-  print("$imageBaseUrl$size$path");
   if (path != null && path.isNotEmpty) {
     return "$imageBaseUrl$size$path";
   }

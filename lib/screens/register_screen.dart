@@ -96,6 +96,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
           ),
           contentPadding: EdgeInsets.symmetric(horizontal: 24, vertical: 20),
           title: Text(
+            textAlign: TextAlign.center,
             englishMode ? "Confirm Email?" : "Konfirmasi Email?",
             style: TextStyle(color: Colors.grey),
           ),
