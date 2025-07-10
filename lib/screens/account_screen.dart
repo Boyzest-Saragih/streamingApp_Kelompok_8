@@ -4,7 +4,6 @@ import 'package:flutter_fe/provider/theme.dart';
 import 'package:flutter_fe/provider/user.dart';
 import 'package:flutter_fe/screens/login_screen.dart';
 import 'package:provider/provider.dart';
-import 'package:flutter_fe/screens/register_screen.dart';
 
 class AccountScreen extends StatelessWidget {
   const AccountScreen({super.key});

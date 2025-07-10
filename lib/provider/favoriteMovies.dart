@@ -9,13 +9,13 @@ class User {
 class Movie {
   final String movieId;
   final String title;
-  final String desc;
+  final String rating;
   final String posterPath;
 
   Movie({
     required this.movieId,
     required this.title,
-    required this.desc,
+    required this.rating,
     required this.posterPath,
   });
 }

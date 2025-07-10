@@ -126,9 +126,31 @@ Future<dynamic> getMoviesBySearch(search) async {
   }
 }
 
+Future<dynamic> getMoviesByDate(String fromDate, String toDate) async{
+  try{
+    final url = Uri.parse(
+      "https://api.themoviedb.org/3/discover/movie"
+      "?&primary_release_date.gte=$fromDate"
+      "&primary_release_date.lte=$toDate"
+      "&sort_by=release_date.desc"
+    );
+
+    final response = await http.get(url, headers: headers);
+    if (response.statusCode == 200) {
+      final data = jsonDecode(response.body);
+      return data;
+    } else {
+      print(response.statusCode);
+      return null;
+    }
+  } catch (e) {
+    print('Error : $e');
+    return null;
+  }
+}
+
 const String imageBaseUrl = "https://image.tmdb.org/t/p/";
 String getImageUrl(dynamic path, {String size = "w500"}) {
-  print("$imageBaseUrl$size$path");
   if (path != null && path.isNotEmpty) {
     return "$imageBaseUrl$size$path";
   }

@@ -30,61 +30,86 @@ class _FavoritescreenState extends State<Favoritescreen> {
     return Scaffold(
       body: Padding(
         padding: const EdgeInsets.all(8.0),
-        child: favorite.isEmpty
-            ? Center(
-                child: Text(
-                  enLang ? "No favorite movies yet." : "Belum ada film favorit.",
-                  style: TextStyle(fontSize: 16),
-                ),
-              )
-            : GridView.builder(
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 3,
-                  mainAxisSpacing: 10,
-                  crossAxisSpacing: 10,
-                  childAspectRatio: 0.6,
-                ),
-                itemCount: favorite.length,
-                itemBuilder: (context, index) {
-                  final movie = favorite[index];
-                  return GestureDetector(
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => WatchPage(idMovie: movie.movieId),
-                        ),
-                      );
-                    },
-                    child: Container(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(8),
-                        image: movie.posterPath != null
-                            ? DecorationImage(
-                                image: NetworkImage(
-                                  getImageUrl(movie.posterPath),
-                                ),
-                                fit: BoxFit.cover,
-                              )
-                            : null,
-                        color: Colors.grey[300],
-                      ),
-                      child: Align(
-                        alignment: Alignment.bottomCenter,
-                        child: Container(
-                          padding: const EdgeInsets.all(4),
-                          decoration: BoxDecoration(
-                            color: Colors.black.withOpacity(0.5),
-                            borderRadius: const BorderRadius.vertical(
-                              bottom: Radius.circular(8),
+        child:
+            favorite.isEmpty
+                ? const Center(
+                  child: Text(
+                    "No favorite movies yet.",
+                    style: TextStyle(fontSize: 16),
+                  ),
+                )
+                : GridView.builder(
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 3,
+                    mainAxisSpacing: 10,
+                    crossAxisSpacing: 10,
+                    childAspectRatio: 0.8,
+                  ),
+                  itemCount: favorite.length,
+                  itemBuilder: (context, index) {
+                    final movie = favorite[index];
+                    return GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder:
+                                (context) => WatchPage(idMovie: movie.movieId),
+                          ),
+                        );
+                      },
+                      child: Container(
+                        width: 150,
+                        margin: EdgeInsets.symmetric(horizontal: 8),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10),
+                          image: DecorationImage(
+                            image: NetworkImage(
+                              getImageUrl(movie.posterPath),
                             ),
+                            fit: BoxFit.cover,
                           ),
-                          child: Text(
-                            movie.title ?? 'No Title',
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                            style: const TextStyle(color: Colors.white),
-                          ),
+                        ),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            Container(
+                              alignment: Alignment.bottomCenter,
+                              height: 48,
+                              decoration: BoxDecoration(
+                                gradient: LinearGradient(
+                                  begin: Alignment.bottomCenter,
+                                  end: Alignment.topCenter,
+                                  colors: [Colors.black, Colors.transparent],
+                                ),
+                              ),
+                              child: Column(
+                                children: [
+                                  Text(
+                                    movie.title,
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(color: Colors.white),
+                                  ),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      const Icon(
+                                        Icons.star,
+                                        color: Colors.yellow,
+                                        size: 16,
+                                      ),
+                                      const SizedBox(width: 4),
+                                      Text(
+                                        movie.rating
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
                         ),
                       ),
                     ),

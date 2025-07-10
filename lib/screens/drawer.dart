@@ -8,136 +8,136 @@ import 'package:flutter_fe/screens/home_screen.dart';
 import 'package:flutter_fe/screens/settings_screen.dart';
 import 'package:provider/provider.dart';
 
-class drawerCreen extends StatefulWidget {
-  const drawerCreen({super.key});
+class DrawerScreen extends StatefulWidget {
+  const DrawerScreen({super.key});
 
   @override
-  State<drawerCreen> createState() => _drawerCreenState();
+  State<DrawerScreen> createState() => _DrawerScreenState();
 }
 
-class _drawerCreenState extends State<drawerCreen> {
-  TextEditingController _searchCtr = TextEditingController();
-  String _searchTextField = "";
-  String _selectedLanguage = 'en';
+class _DrawerScreenState extends State<DrawerScreen> {
+  int selectedScreen = 0;
 
-  List<Widget> screen = [HomePage(), AccountScreen(), settingsScreen(), Favoritescreen()];
-  int selectScreen = 0;
+
+  final List<Widget> screens = [
+    HomePage(),
+    AccountScreen(),
+    settingsScreen(),
+    Favoritescreen(),
+  ];
 
   @override
   Widget build(BuildContext context) {
     final themeProvider = Provider.of<ThemeProv>(context);
-    final theme = themeProvider.isDarkMode;
-    final users = Provider.of<UserProvider>(context);
-    final user = users.currentUser;
     final languageProvider = Provider.of<LanguageProv>(context);
-    final enLang = languageProvider.currentLanguage == "en";
 
-    print('DrawerScreen - Current language: ${languageProvider.currentLanguage}');
-    print('DrawerScreen - enLang: $enLang');
+    final user = Provider.of<UserProvider>(context).currentUser;
+    final isEnglish = languageProvider.currentLanguage == "en";
+
 
     return Scaffold(
       appBar: AppBar(
+        title: const Text("MovieFy"),
         leading: Builder(
           builder: (context) => IconButton(
+
+            icon: const Icon(Icons.menu),
             onPressed: () => Scaffold.of(context).openDrawer(),
-            icon: Icon(Icons.menu),
+
           ),
         ),
-        title: Text("MovieFy"),
       ),
       drawer: Drawer(
         width: 300,
-        child: ListView(
+        child: Column(
           children: [
             UserAccountsDrawerHeader(
               decoration: BoxDecoration(
                 image: DecorationImage(
-                  image: NetworkImage("https://picsum.photos/200/?blur"),
+                  image: NetworkImage("https://picsum.photos/300/150?blur"),
                   fit: BoxFit.cover,
+                  colorFilter: ColorFilter.mode(
+                    Colors.black.withOpacity(0.4),
+                    BlendMode.darken,
+                  ),
                 ),
               ),
               currentAccountPicture: CircleAvatar(
                 backgroundImage: NetworkImage("https://picsum.photos/200"),
               ),
-              accountName: Text(user!.username),
-              accountEmail: Text(user!.email),
-            ),
-            Tooltip(
-              message: enLang ? "Go to home page" : "Pergi ke halaman beranda",
-              child: ListTile(
-                leading: Icon(Icons.home),
-                title: Text(enLang ? "Home" : "Beranda"),
-                onTap: () {
-                  setState(() {
-                    selectScreen = 0;
-                    Navigator.pop(context);
-                  });
-                },
+              accountName: Text(
+                user?.username ?? "Guest",
+                style: const TextStyle(fontWeight: FontWeight.bold),
               ),
+              accountEmail: Text(user?.email ?? "guest@email.com"),
             ),
-            Tooltip(
-              message: enLang ? "View your profile" : "Lihat profil Anda",
-              child: ListTile(
-                leading: Icon(Icons.account_box),
-                title: Text(enLang ? "Profile" : "Profil"),
-                onTap: () {
-                  setState(() {
-                    selectScreen = 1;
-                    Navigator.pop(context);
-                  });
-                },
-              ),
-            ),
-            Tooltip(
-              message: enLang ? "Adjust app settings" : "Sesuaikan pengaturan aplikasi",
-              child: ListTile(
-                leading: Icon(Icons.settings),
-                title: Text(enLang ? "Settings" : "Pengaturan"),
-                onTap: () {
-                  setState(() {
-                    selectScreen = 2;
-                    Navigator.pop(context);
-                  });
-                },
-              ),
-            ),
-            Tooltip(
-              message: enLang ? "View your favorite movies" : "Lihat film favorit Anda",
-              child: ListTile(
-                leading: Icon(Icons.bookmark),
-                title: Text(enLang ? "Favorite" : "Favorit"),
-                onTap: () {
-                  setState(() {
-                    selectScreen = 3;
-                    Navigator.pop(context);
-                  });
-                },
-              ),
-            ),
-            Tooltip(
-              message: enLang ? "Toggle light/dark theme" : "Ubah tema terang/gelap",
+
+            _buildDrawerItem(Icons.home_outlined, "Home", 0, isEnglish),
+            _buildDrawerItem(Icons.account_circle_outlined, "Profile", 1, isEnglish),
+            _buildDrawerItem(Icons.bookmark_outline, "Favorite", 3, isEnglish),
+            _buildDrawerItem(Icons.settings_outlined, "Settings", 2, isEnglish),
+
+            const Divider(thickness: 1, height: 20),
+
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 0),
               child: SwitchListTile(
-                title: Text(
-                  enLang ? 'Theme' : "Tema",
-                  style: Theme.of(context).textTheme.titleSmall,
-                ),
+                title: Text(isEnglish ? 'Dark Mode' : 'Mode Gelap'),
                 secondary: Icon(
-                  themeProvider.isDarkMode ? Icons.dark_mode : Icons.light_mode,
+                  themeProvider.isDarkMode
+                      ? Icons.dark_mode_outlined
+                      : Icons.light_mode_outlined,
                 ),
                 value: themeProvider.isDarkMode,
-                onChanged: (val) {
-                  setState(() {
-                    themeProvider.toggleTheme();
-                  });
-                },
+                onChanged: (_) => themeProvider.toggleTheme(),
                 activeColor: Colors.amber,
-                inactiveThumbColor: Colors.grey,
+
               ),
             ),
           ],
         ),
       ),
-      body: screen[selectScreen],
+      body: IndexedStack(
+        index: selectedScreen,
+        children: screens,
+      ),
     );
+  }
+
+  Widget _buildDrawerItem(
+      IconData icon, String label, int index, bool isEnglish) {
+    final isSelected = selectedScreen == index;
+    return ListTile(
+      leading: Icon(icon, color: isSelected ? Colors.amber : null),
+      title: Text(
+        isEnglish ? label : _translate(label),
+        style: TextStyle(
+          fontWeight: isSelected ? FontWeight.w400 : FontWeight.normal,
+          color: isSelected ? Colors.amber : null,
+        ),
+      ),
+      tileColor: isSelected ? Colors.amber.withOpacity(0.1) : null,
+      onTap: () {
+        setState(() {
+          selectedScreen = index;
+        });
+        Navigator.pop(context);
+      },
+    );
+  }
+
+  String _translate(String label) {
+    switch (label) {
+      case "Home":
+        return "Beranda";
+      case "Profile":
+        return "Profil";
+      case "Favorite":
+        return "Favorit";
+      case "Settings":
+        return "Pengaturan";
+      default:
+        return label;
+    }
   }
 }

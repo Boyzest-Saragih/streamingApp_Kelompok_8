@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_fe/provider/language.dart';
 import 'package:flutter_fe/provider/theme.dart';
+import 'package:flutter_fe/screens/movieListScreen.dart';
 import 'package:flutter_fe/screens/searchScreen.dart';
 import 'package:flutter_fe/screens/watch_screen.dart';
 import 'package:provider/provider.dart';
@@ -17,6 +18,12 @@ class _HomePageState extends State<HomePage> {
   List<dynamic> popularMovies = [];
   List<dynamic> topRatedMovies = [];
   List<dynamic> upcomingMovies = [];
+  List<dynamic> filteredMovie = [];
+
+  bool isfiltered = false;
+
+  DateTimeRange ? pickedRange;
+  
 
   @override
   void initState() {
@@ -39,6 +46,8 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
+
+
   @override
   Widget build(BuildContext context) {
     final themeProvider = Provider.of<ThemeProv>(context);
@@ -54,15 +63,21 @@ class _HomePageState extends State<HomePage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            SizedBox(),
-
-            const SizedBox(height: 20),
-
+            const SizedBox(height: 5,),
             // Top List
             Padding(
               padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
               child: TextButton(
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.push(
+                    context, 
+                    MaterialPageRoute(builder: (context) => movielistpage(
+                      title: enLang? "Top Movie" : "Folm Teratas", 
+                      movies: popularMovies,
+                      filterable: true,
+                    ),),
+                  );
+                },
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -174,7 +189,16 @@ class _HomePageState extends State<HomePage> {
             Padding(
               padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
               child: TextButton(
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.push(
+                    context, 
+                    MaterialPageRoute(builder: (context) => movielistpage(
+                      title: enLang? "Top Rated Movie" : "Film Nilai Tertinggi", 
+                      movies: topRatedMovies,
+                      filterable: true,
+                    ),),
+                  );
+                },
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -284,7 +308,16 @@ class _HomePageState extends State<HomePage> {
             Padding(
               padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
               child: TextButton(
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.push(
+                    context, 
+                    MaterialPageRoute(builder: (context) => movielistpage(
+                      title: enLang? "Upcoming Movie" : "Film Mendatang", 
+                      movies: upcomingMovies,
+                      filterable: true,
+                    ),),
+                  );
+                },
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [

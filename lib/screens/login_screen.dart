@@ -71,7 +71,7 @@ class _LoginScreenState extends State<LoginScreen> {
       if (userData!.password == password){
         Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => drawerCreen()));
+        MaterialPageRoute(builder: (context) => DrawerScreen()));
       } else {
         _showBanner(englishMode? "Incorrect Password" : "Password salah");
       }

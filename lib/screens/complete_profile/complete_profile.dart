@@ -155,7 +155,7 @@ class _CompleteProfileState extends State<CompleteProfile> {
 
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => drawerCreen()),
+      MaterialPageRoute(builder: (context) => DrawerScreen()),
     );
   }
 
