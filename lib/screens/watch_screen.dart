@@ -84,7 +84,22 @@ class _WatchPageState extends State<WatchPage> {
       return Scaffold(
         appBar: AppBar(
           title: Text(movieData?["original_title"] ?? "Loading..."),
-          actions: [
+          
+        ),
+        body: const Center(child: CircularProgressIndicator()),
+      );
+    }
+
+    return YoutubePlayerBuilder(
+      player: YoutubePlayer(
+        controller: _controller!,
+        showVideoProgressIndicator: true,
+      ),
+      builder: (context, player) {
+        return Scaffold(
+          appBar: AppBar(
+            title: Text(movieData?["original_title"] ?? "Loading..."),
+            actions: [
             IconButton(
               onPressed: () {
                 final userId = user.userId.toString();
@@ -124,20 +139,6 @@ class _WatchPageState extends State<WatchPage> {
               ),
             ),
           ],
-        ),
-        body: const Center(child: CircularProgressIndicator()),
-      );
-    }
-
-    return YoutubePlayerBuilder(
-      player: YoutubePlayer(
-        controller: _controller!,
-        showVideoProgressIndicator: true,
-      ),
-      builder: (context, player) {
-        return Scaffold(
-          appBar: AppBar(
-            title: Text(movieData?["original_title"] ?? "Loading..."),
           ),
           body: SingleChildScrollView(
             padding: const EdgeInsets.all(16),
