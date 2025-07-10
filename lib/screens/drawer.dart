@@ -4,6 +4,7 @@ import 'package:flutter_fe/provider/theme.dart';
 import 'package:flutter_fe/provider/user.dart';
 import 'package:flutter_fe/screens/account_screen.dart';
 import 'package:flutter_fe/screens/favoriteScreen.dart';
+import 'package:flutter_fe/screens/filterAllMovie.dart';
 import 'package:flutter_fe/screens/home_screen.dart';
 import 'package:flutter_fe/screens/settings_screen.dart';
 import 'package:provider/provider.dart';
@@ -18,12 +19,12 @@ class DrawerScreen extends StatefulWidget {
 class _DrawerScreenState extends State<DrawerScreen> {
   int selectedScreen = 0;
 
-
   final List<Widget> screens = [
     HomePage(),
     AccountScreen(),
     settingsScreen(),
     Favoritescreen(),
+    Discovermovie(),
   ];
 
   @override
@@ -34,17 +35,15 @@ class _DrawerScreenState extends State<DrawerScreen> {
     final user = Provider.of<UserProvider>(context).currentUser;
     final isEnglish = languageProvider.currentLanguage == "en";
 
-
     return Scaffold(
       appBar: AppBar(
         title: const Text("MovieFy"),
         leading: Builder(
-          builder: (context) => IconButton(
-
-            icon: const Icon(Icons.menu),
-            onPressed: () => Scaffold.of(context).openDrawer(),
-
-          ),
+          builder:
+              (context) => IconButton(
+                icon: const Icon(Icons.menu),
+                onPressed: () => Scaffold.of(context).openDrawer(),
+              ),
         ),
       ),
       drawer: Drawer(
@@ -73,7 +72,13 @@ class _DrawerScreenState extends State<DrawerScreen> {
             ),
 
             _buildDrawerItem(Icons.home_outlined, "Home", 0, isEnglish),
-            _buildDrawerItem(Icons.account_circle_outlined, "Profile", 1, isEnglish),
+            _buildDrawerItem(
+              Icons.account_circle_outlined,
+              "Profile",
+              1,
+              isEnglish,
+            ),
+            _buildDrawerItem(Icons.search_sharp, "Discover", 4, isEnglish),
             _buildDrawerItem(Icons.bookmark_outline, "Favorite", 3, isEnglish),
             _buildDrawerItem(Icons.settings_outlined, "Settings", 2, isEnglish),
 
@@ -91,21 +96,21 @@ class _DrawerScreenState extends State<DrawerScreen> {
                 value: themeProvider.isDarkMode,
                 onChanged: (_) => themeProvider.toggleTheme(),
                 activeColor: Colors.amber,
-
               ),
             ),
           ],
         ),
       ),
-      body: IndexedStack(
-        index: selectedScreen,
-        children: screens,
-      ),
+      body: IndexedStack(index: selectedScreen, children: screens),
     );
   }
 
   Widget _buildDrawerItem(
-      IconData icon, String label, int index, bool isEnglish) {
+    IconData icon,
+    String label,
+    int index,
+    bool isEnglish,
+  ) {
     final isSelected = selectedScreen == index;
     return ListTile(
       leading: Icon(icon, color: isSelected ? Colors.amber : null),
@@ -132,6 +137,8 @@ class _DrawerScreenState extends State<DrawerScreen> {
         return "Beranda";
       case "Profile":
         return "Profil";
+      case "Discover":
+        return "Menemukan";
       case "Favorite":
         return "Favorit";
       case "Settings":

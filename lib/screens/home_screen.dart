@@ -50,44 +50,11 @@ class _HomePageState extends State<HomePage> {
     final enLang = languageProvider.currentLanguage == "en" ? true : false;
 
     return Scaffold(
-      floatingActionButton: FloatingActionButton(onPressed: (){
-        Navigator.push(context, MaterialPageRoute(builder: (context)=>SearchScreen()));
-      },child: Icon(Icons.search),backgroundColor: Colors.amber,),
+      
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-
-            SizedBox(),
-            
-            Padding(
-              padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
-              child: TextButton(
-                onPressed: () {
-                  Navigator.push(
-                    context, 
-                    MaterialPageRoute(builder: (context) => filterAllmovie(
-                      title: enLang? "All Movie" : "Semua film", 
-                    ),),
-                  );
-                },
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Text(
-                      enLang ? "Movie" : "Film",
-                      style: Theme.of(context).textTheme.titleSmall,
-                      
-                    ),
-                    Icon(
-                      Icons.arrow_forward_ios,
-                      size: 14,
-                      color: theme ? Colors.white : Colors.black,
-                    ),
-                  ],
-                ),
-              ),
-            ),
  
             const SizedBox(height: 10,),
 

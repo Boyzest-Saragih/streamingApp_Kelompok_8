@@ -127,8 +127,8 @@ class _IntroscreenState extends State<Introscreen> {
                       );
                     },
                     child: const Text(
-                      "Explore",
-                      style: TextStyle(fontWeight: FontWeight.bold),
+                      "Welcome To MovieFy",
+                      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
                     ),
                   ).animate().slideY(duration: 600.ms).fadeIn(),
                 ],

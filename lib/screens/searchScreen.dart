@@ -42,42 +42,41 @@ class _SearchScreenState extends State<SearchScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Expanded(
-                  child: TextField(
-                    controller: _search,
-                    onSubmitted: handleSearch,
-                    style: TextStyle(color: Colors.black),
-                    decoration: InputDecoration(
-                      hintText: "Cari film...",
-                      filled: true,
-                      fillColor: Colors.white,
-                      contentPadding: EdgeInsets.symmetric(
-                        horizontal: 16,
-                        vertical: 12,
-                      ),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(20),
-                        borderSide: BorderSide(color: Colors.grey),
-                      ),
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(20),
-                        borderSide: BorderSide(color: Colors.grey),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(20),
-                        borderSide: BorderSide(
-                          color: Colors.blueAccent,
-                          width: 2,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-        actions: [                IconButton(
-                  icon: Icon(Icons.search),
-                  onPressed: () => handleSearch(_search.text),
-                ),],
+  elevation: 2,
+  toolbarHeight: 70,
+  title: Container(
+    height: 45,
+    decoration: BoxDecoration(
+      color: Colors.grey[200],
+      borderRadius: BorderRadius.circular(25),
+    ),
+    child: TextField(
+      controller: _search,
+      onSubmitted: handleSearch,
+      textInputAction: TextInputAction.search,
+      style: const TextStyle(color: Colors.black),
+      decoration: InputDecoration(
+        hintText: "Cari film...",
+        hintStyle: TextStyle(color: Colors.grey[600]),
+        prefixIcon: const Icon(Icons.search, color: Colors.grey),
+        contentPadding: EdgeInsets.symmetric(vertical: 10),
+        border: InputBorder.none,
       ),
+    ),
+  ),
+  actions: [
+    IconButton(
+      icon: const Icon(Icons.close, color: Colors.grey),
+      onPressed: () {
+        setState(() {
+          _search.clear();
+          movies.clear();
+        });
+      },
+    ),
+  ],
+),
+
       body: Padding(
         padding: EdgeInsets.all(10),
         child: Column(

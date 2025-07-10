@@ -1,26 +1,24 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_fe/screens/searchScreen.dart';
 import 'package:flutter_fe/screens/watch_screen.dart';
 import '../utils/api.dart';
 
-class filterAllmovie extends StatefulWidget {
-  final String title;
+class Discovermovie extends StatefulWidget {
   final bool filterable;
 
-  const filterAllmovie({
+  const Discovermovie({
     super.key,
-    required this.title,
     this.filterable = false,
   });
 
   @override
-  State<filterAllmovie> createState() => _filterAllmovieState();
+  State<Discovermovie> createState() => _DiscovermovieState();
 }
 
-class _filterAllmovieState extends State<filterAllmovie> {
+class _DiscovermovieState extends State<Discovermovie> {
   List<dynamic> allMovie = [];
   List<dynamic> filteredMovie = [];
   DateTimeRange? pickedRange;
-  bool isLoading = true;
 
   @override
   void initState() {
@@ -29,10 +27,6 @@ class _filterAllmovieState extends State<filterAllmovie> {
   }
 
   Future<void> fetchAllMovie() async {
-    setState(() {
-      isLoading = true;
-    });
-
     final popular = await getPopularMovies();
     final topRated = await getTopRatedMovies();
     final upcoming = await getUpcomingMovies();
@@ -42,10 +36,10 @@ class _filterAllmovieState extends State<filterAllmovie> {
       ...topRated["results"],
       ...upcoming["results"],
     ];
+
     setState(() {
       allMovie = combined;
       filteredMovie = combined;
-      isLoading = false;
     });
   }
 
@@ -76,113 +70,139 @@ class _filterAllmovieState extends State<filterAllmovie> {
         "${date.day.toString().padLeft(2, "0")}";
   }
 
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          widget.title,
-          style: TextStyle(
-            fontSize: 18,
-            fontWeight: FontWeight.bold,
-            overflow: TextOverflow.ellipsis,
-          ),
-        ),
-        actions: [
-          if (pickedRange != null)
-            Padding(
-              padding: const EdgeInsets.only(right: 8),
-              child: Text(
-                "${_formatDate(pickedRange!.start)} - ${_formatDate(pickedRange!.end)}",
-                style: TextStyle(fontSize: 12),
-              ),
-            ),
-          if (pickedRange != null)
-            IconButton(
-              onPressed: () {
-                setState(() {
-                  pickedRange = null;
-                  filteredMovie = allMovie;
-                });
-              },
-              icon: Icon(Icons.clear),
-            ),
-          IconButton(
-            onPressed: pickDateRange,
-            icon: const Icon(Icons.filter_alt),
-          ),
-        ],
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => const SearchScreen()),
+          );
+        },
+        backgroundColor: Colors.amber,
+        child: const Icon(Icons.search),
       ),
-      body:
-          isLoading
-              ? const Center(child: CircularProgressIndicator())
-              : filteredMovie.isEmpty
-              ? Center(child: Text("No movies found"))
-              : Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: GridView.builder(
-                  itemCount: filteredMovie.length,
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 8,
-                    crossAxisSpacing: 10,
-                    mainAxisSpacing: 10,
-                    childAspectRatio: 0.6,
+      body: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                if (pickedRange != null)
+                  Expanded(
+                    child: Text(
+                      "${_formatDate(pickedRange!.start)} - ${_formatDate(pickedRange!.end)}",
+                      style: const TextStyle(fontSize: 12),
+                    ),
                   ),
-                  itemBuilder: (context, index) {
-                    final movie = filteredMovie[index];
-                    return GestureDetector(
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder:
-                                (context) =>
-                                    WatchPage(idMovie: movie["id"].toString()),
+                if (pickedRange != null)
+                  IconButton(
+                    onPressed: () {
+                      setState(() {
+                        pickedRange = null;
+                        filteredMovie = allMovie;
+                      });
+                    },
+                    icon: const Icon(Icons.clear),
+                  ),
+                IconButton(
+                  onPressed: pickDateRange,
+                  icon: const Icon(Icons.filter_alt),
+                ),
+              ],
+            ),
+            const SizedBox(height: 8),
+
+            Expanded(
+              child: GridView.builder(
+                itemCount: filteredMovie.length,
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 3,
+                  crossAxisSpacing: 10,
+                  mainAxisSpacing: 10,
+                  childAspectRatio: 0.8,
+                ),
+                itemBuilder: (context, index) {
+                  final movie = filteredMovie[index];
+                  return GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => WatchPage(
+                            idMovie: movie["id"].toString(),
                           ),
-                        );
-                      },
+                        ),
+                      );
+                    },
+                    child: Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        image: DecorationImage(
+                          image: NetworkImage(
+                            getImageUrl(movie["poster_path"]),
+                          ),
+                          fit: BoxFit.cover,
+                        ),
+                      ),
                       child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.end,
                         children: [
-                          Expanded(
-                            child: ClipRRect(
-                              borderRadius: BorderRadiusGeometry.circular(8),
-                              child: Image.network(
-                                getImageUrl(movie["poster_path"]),
-                                fit: BoxFit.cover,
-                                width: double.infinity,
+                          Container(
+                            alignment: Alignment.bottomCenter,
+                            height: 48,
+                            decoration: const BoxDecoration(
+                              borderRadius: BorderRadius.only(
+                                bottomLeft: Radius.circular(10),
+                                bottomRight: Radius.circular(10),
+                              ),
+                              gradient: LinearGradient(
+                                begin: Alignment.bottomCenter,
+                                end: Alignment.topCenter,
+                                colors: [Colors.black, Colors.transparent],
                               ),
                             ),
-                          ),
-                          const SizedBox(height: 5),
-                          Text(
-                            movie["title"],
-                            maxLines: 2,
-                            overflow: TextOverflow.ellipsis,
-                            style: const TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 15,
+                            child: Column(
+                              children: [
+                                Text(
+                                  movie["title"] ?? "",
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                  textAlign: TextAlign.center,
+                                  style: const TextStyle(color: Colors.white),
+                                ),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    const Icon(
+                                      Icons.star,
+                                      color: Colors.yellow,
+                                      size: 16,
+                                    ),
+                                    const SizedBox(width: 4),
+                                    Text(
+                                      movie["vote_average"].toStringAsFixed(2),
+                                      style: const TextStyle(
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ],
                             ),
-                          ),
-                          Row(
-                            children: [
-                              const Icon(
-                                Icons.star,
-                                size: 16,
-                                color: Colors.yellow,
-                              ),
-                              const SizedBox(width: 4),
-                              Text(
-                                movie["vote_average"].toStringAsFixed(2),
-                                style: TextStyle(fontSize: 12),
-                              ),
-                            ],
                           ),
                         ],
                       ),
-                    );
-                  },
-                ),
+                    ),
+                  );
+                },
               ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

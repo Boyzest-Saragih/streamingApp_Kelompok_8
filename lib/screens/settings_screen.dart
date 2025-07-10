@@ -112,11 +112,69 @@ class _settingsScreenState extends State<settingsScreen> {
                     isEnglish
                         ? "MovieFy is a simple movie app for practice and learning."
                         : "MovieFy adalah aplikasi film sederhana untuk latihan dan pembelajaran.",
-                    style: TextStyle(
-                      color: Colors.black,
-                    ),
+                    style: TextStyle(color: Colors.black),
                   ),
                 ],
+              );
+            },
+          ),
+
+          ListTile(
+            leading: Icon(Icons.group),
+            title: Text(isEnglish ? "Developer Team" : "Tim Pengembang", style: TextStyle(color: Colors.white),),
+            onTap: () {
+              showDialog(
+                context: context,
+                builder:
+                    (context) => AlertDialog(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(15),
+                      ),
+                      contentPadding: EdgeInsets.all(16),
+                      title: Text(
+                        isEnglish ? "Developer Info" : "Informasi Pengembang",
+                        style: TextStyle(fontWeight: FontWeight.bold,color: Colors.white),
+                      ),
+                      content: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          ClipRRect(
+                            borderRadius: BorderRadius.circular(50),
+                            child: Image.network(
+                              "https://avatars.githubusercontent.com/u/138434387?v=4",
+                              height: 100,
+                              width: 100,
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                          const SizedBox(height: 12),
+                          Text(
+                            "• Enjel  • Rifky  • Indra  • Dedi",
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 16,
+                            ),
+                          ),
+                          Text(
+                             "Team Kewek Kewek 😂",
+                            style: TextStyle(color: Colors.grey[600]),
+                            textAlign: TextAlign.center,
+                          ),
+                          const SizedBox(height: 8),
+                          Text(
+                                "Pengembang di balik MovieFy. Fokus membangun aplikasi film yang bersih dan fungsional layaknya pengganti netflix 2026",
+                            style: TextStyle(fontSize: 13),
+                            textAlign: TextAlign.center,
+                          ),
+                        ],
+                      ),
+                      actions: [
+                        TextButton(
+                          child: Text(isEnglish ? "Close" : "Tutup"),
+                          onPressed: () => Navigator.pop(context),
+                        ),
+                      ],
+                    ),
               );
             },
           ),
