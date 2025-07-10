@@ -20,7 +20,7 @@ class _drawerCreenState extends State<drawerCreen> {
   String _searchTextField = "";
   String _selectedLanguage = 'en';
 
-  List<Widget> screen = [HomePage(), AccountScreen(), settingsScreen(),Favoritescreen()];
+  List<Widget> screen = [HomePage(), AccountScreen(), settingsScreen(), Favoritescreen()];
   int selectScreen = 0;
 
   @override
@@ -30,15 +30,18 @@ class _drawerCreenState extends State<drawerCreen> {
     final users = Provider.of<UserProvider>(context);
     final user = users.currentUser;
     final languageProvider = Provider.of<LanguageProv>(context);
-    final enLang = languageProvider.currentLanguage == "en" ? true : false;
+    final enLang = languageProvider.currentLanguage == "en";
+
+    print('DrawerScreen - Current language: ${languageProvider.currentLanguage}');
+    print('DrawerScreen - enLang: $enLang');
+
     return Scaffold(
       appBar: AppBar(
         leading: Builder(
-          builder:
-              (context) => IconButton(
-                onPressed: () => Scaffold.of(context).openDrawer(),
-                icon: Icon(Icons.menu),
-              ),
+          builder: (context) => IconButton(
+            onPressed: () => Scaffold.of(context).openDrawer(),
+            icon: Icon(Icons.menu),
+          ),
         ),
         title: Text("MovieFy"),
       ),
@@ -59,75 +62,77 @@ class _drawerCreenState extends State<drawerCreen> {
               accountName: Text(user!.username),
               accountEmail: Text(user!.email),
             ),
-
-            ListTile(
-              leading: Tooltip(
-                message: enLang ? "Go to Home" : "Ke Beranda",
-                child: Icon(Icons.home),
+            Tooltip(
+              message: enLang ? "Go to home page" : "Pergi ke halaman beranda",
+              child: ListTile(
+                leading: Icon(Icons.home),
+                title: Text(enLang ? "Home" : "Beranda"),
+                onTap: () {
+                  setState(() {
+                    selectScreen = 0;
+                    Navigator.pop(context);
+                  });
+                },
               ),
-              title: Text("Home"),
-              onTap: () {
-                setState(() {
-                  selectScreen = 0;
-                  Navigator.pop(context);
-                });
-              },
             ),
-            ListTile(
-              leading: Tooltip(
-                message: enLang ? "View Profile" : "Lihat Profil",
-                child: Icon(Icons.account_box),
+            Tooltip(
+              message: enLang ? "View your profile" : "Lihat profil Anda",
+              child: ListTile(
+                leading: Icon(Icons.account_box),
+                title: Text(enLang ? "Profile" : "Profil"),
+                onTap: () {
+                  setState(() {
+                    selectScreen = 1;
+                    Navigator.pop(context);
+                  });
+                },
               ),
-              title: Text("Profile"),
-              onTap: () {
-                setState(() {
-                  selectScreen = 1;
-                  Navigator.pop(context);
-                });
-              },
             ),
-
-            ListTile(
-              leading: Tooltip(
-                message: enLang ? "Open Settings" : "Buka Pengaturan",
-                child: Icon(Icons.settings),
+            Tooltip(
+              message: enLang ? "Adjust app settings" : "Sesuaikan pengaturan aplikasi",
+              child: ListTile(
+                leading: Icon(Icons.settings),
+                title: Text(enLang ? "Settings" : "Pengaturan"),
+                onTap: () {
+                  setState(() {
+                    selectScreen = 2;
+                    Navigator.pop(context);
+                  });
+                },
               ),
-              title: Text("Settings"),
-              onTap: () {
-                setState(() {
-                  selectScreen = 2;
-                  Navigator.pop(context);
-                });
-              },
             ),
-
-
-            ListTile(
-              leading: Icon(Icons.bookmark),
-              title: Text("Favorite"),
-              onTap: () {
-                setState(() {
-                  selectScreen = 3;
-                  Navigator.pop(context);
-                });
-              },
+            Tooltip(
+              message: enLang ? "View your favorite movies" : "Lihat film favorit Anda",
+              child: ListTile(
+                leading: Icon(Icons.bookmark),
+                title: Text(enLang ? "Favorite" : "Favorit"),
+                onTap: () {
+                  setState(() {
+                    selectScreen = 3;
+                    Navigator.pop(context);
+                  });
+                },
+              ),
             ),
-
-            SwitchListTile(
-              title: Text(
-                enLang ? 'Theme' : "Tema",
-                style: Theme.of(context).textTheme.titleSmall,
+            Tooltip(
+              message: enLang ? "Toggle light/dark theme" : "Ubah tema terang/gelap",
+              child: SwitchListTile(
+                title: Text(
+                  enLang ? 'Theme' : "Tema",
+                  style: Theme.of(context).textTheme.titleSmall,
+                ),
+                secondary: Icon(
+                  themeProvider.isDarkMode ? Icons.dark_mode : Icons.light_mode,
+                ),
+                value: themeProvider.isDarkMode,
+                onChanged: (val) {
+                  setState(() {
+                    themeProvider.toggleTheme();
+                  });
+                },
+                activeColor: Colors.amber,
+                inactiveThumbColor: Colors.grey,
               ),
-
-              ),
-              value: themeProvider.isDarkMode,
-              onChanged: (val) {
-                setState(() {
-                  themeProvider.toggleTheme();
-                });
-              },
-              activeColor: Colors.amber,
-              inactiveThumbColor: Colors.grey,
             ),
           ],
         ),

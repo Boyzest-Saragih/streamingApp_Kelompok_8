@@ -13,35 +13,35 @@ class CompleteProfile extends StatefulWidget {
 }
 
 class _CompleteProfileState extends State<CompleteProfile> {
-  final List<String> movieGenres = [
-    "Action",
-    "Adventure",
-    "Animation",
-    "Comedy",
-    "Crime",
-    "Documentary",
-    "Drama",
-    "Fantasy",
-    "Historical",
-    "Horror",
-    "Musical",
-    "Mystery",
-    "Romance",
-    "Science Fiction",
-    "Thriller",
-    "Western",
-    "War",
-    "Biography",
-    "Family",
-    "Sports",
-    "Superhero",
-    "Noir",
-    "Psychological",
-    "Disaster",
+  final List<Map<String, String>> movieGenres = [
+    {'en': 'Action', 'in': 'Aksi'},
+    {'en': 'Adventure', 'in': 'Petualangan'},
+    {'en': 'Animation', 'in': 'Animasi'},
+    {'en': 'Comedy', 'in': 'Komedi'},
+    {'en': 'Crime', 'in': 'Kriminal'},
+    {'en': 'Documentary', 'in': 'Dokumenter'},
+    {'en': 'Drama', 'in': 'Drama'},
+    {'en': 'Fantasy', 'in': 'Fantasi'},
+    {'en': 'Historical', 'in': 'Sejarah'},
+    {'en': 'Horror', 'in': 'Horor'},
+    {'en': 'Musical', 'in': 'Musikal'},
+    {'en': 'Mystery', 'in': 'Misteri'},
+    {'en': 'Romance', 'in': 'Romansa'},
+    {'en': 'Science Fiction', 'in': 'Fiksi Ilmiah'},
+    {'en': 'Thriller', 'in': 'Thriller'},
+    {'en': 'Western', 'in': 'Barat'},
+    {'en': 'War', 'in': 'Perang'},
+    {'en': 'Biography', 'in': 'Biografi'},
+    {'en': 'Family', 'in': 'Keluarga'},
+    {'en': 'Sports', 'in': 'Olahraga'},
+    {'en': 'Superhero', 'in': 'Pahlawan Super'},
+    {'en': 'Noir', 'in': 'Noir'},
+    {'en': 'Psychological', 'in': 'Psikologis'},
+    {'en': 'Disaster', 'in': 'Bencana'},
   ];
-  final List<String> genderOptions = [
-    'Male',
-    'Female',
+  final List<Map<String, String>> genderOptions = [
+    {'en': 'Male', 'in': 'Laki-laki'},
+    {'en': 'Female', 'in': 'Perempuan'},
   ];
 
   List<String> selectedGenres = [];
@@ -62,7 +62,6 @@ class _CompleteProfileState extends State<CompleteProfile> {
     }
   }
 
-
   void completeProfileButton() {
     final user = Provider.of<UserProvider>(context, listen: false);
     final languageProvider = Provider.of<LanguageProv>(context, listen: false);
@@ -71,7 +70,6 @@ class _CompleteProfileState extends State<CompleteProfile> {
     final genreValid = selectedGenres.length >= 3;
     final genderValid = selectedGender != null;
     final birthDateValid = selectedBirthDate != null;
-
 
     if (!genreValid && !genderValid && !birthDateValid) {
       showDialog(
@@ -164,7 +162,10 @@ class _CompleteProfileState extends State<CompleteProfile> {
   @override
   Widget build(BuildContext context) {
     final languageProvider = Provider.of<LanguageProv>(context);
-    final enLang = languageProvider.currentLanguage == "en" ? true : false;
+    final enLang = languageProvider.currentLanguage == "en";
+
+    print('CompleteProfile - Current language: ${languageProvider.currentLanguage}');
+    print('CompleteProfile - enLang: $enLang');
 
     return Scaffold(
       appBar: AppBar(
@@ -182,16 +183,17 @@ class _CompleteProfileState extends State<CompleteProfile> {
               spacing: 8,
               runSpacing: 8,
               children: movieGenres.map((genre) {
+                final genreKey = enLang ? genre['en']! : genre['in']!;
                 return FilterChip(
                   avatar: const Icon(Icons.movie, size: 18),
-                  label: Text(genre),
-                  selected: selectedGenres.contains(genre),
+                  label: Text(genreKey),
+                  selected: selectedGenres.contains(genre['en']!),
                   onSelected: (bool selected) {
                     setState(() {
                       if (selected) {
-                        selectedGenres.add(genre);
+                        selectedGenres.add(genre['en']!);
                       } else {
-                        selectedGenres.remove(genre);
+                        selectedGenres.remove(genre['en']!);
                       }
                     });
                   },
@@ -200,7 +202,7 @@ class _CompleteProfileState extends State<CompleteProfile> {
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(20),
                     side: BorderSide(
-                      color: selectedGenres.contains(genre)
+                      color: selectedGenres.contains(genre['en']!)
                           ? Colors.amber
                           : Colors.grey,
                     ),
@@ -214,9 +216,10 @@ class _CompleteProfileState extends State<CompleteProfile> {
             Text(enLang ? "Select your gender" : "Pilih jenis kelamin Anda"),
             Column(
               children: genderOptions.map((gender) {
-                return RadioListTile(
-                  title: Text(gender),
-                  value: gender,
+                final genderKey = enLang ? gender['en']! : gender['in']!;
+                return RadioListTile<String>(
+                  title: Text(genderKey),
+                  value: gender['en']!,
                   groupValue: selectedGender,
                   onChanged: (String? value) {
                     setState(() {
@@ -231,14 +234,13 @@ class _CompleteProfileState extends State<CompleteProfile> {
             Text(enLang ? "Select your birth date" : "Pilih tanggal lahir Anda"),
             TextButton.icon(
               onPressed: _pickBirthDate,
-              icon: const Icon(Icons.calendar_today, ),
+              icon: const Icon(Icons.calendar_today),
               label: Text(
                 selectedBirthDate == null
-                  ? (enLang ? "Pick a date" : "Pilih tanggal")
-                  : "${selectedBirthDate!.day}/${selectedBirthDate!.month}/${selectedBirthDate!.year}",
-                  selectionColor: Colors.white,
+                    ? (enLang ? "Pick a date" : "Pilih tanggal")
+                    : "${selectedBirthDate!.day}/${selectedBirthDate!.month}/${selectedBirthDate!.year}",
+                selectionColor: Colors.white,
               ),
-            
             ),
             const SizedBox(height: 40),
             ElevatedButton(
