@@ -1,10 +1,7 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_fe/provider/language.dart';
 import 'package:flutter_fe/provider/user.dart';
 import 'package:flutter_fe/screens/complete_profile/complete_profile.dart';
-import 'package:flutter_fe/screens/home_screen.dart';
 import 'package:flutter_fe/screens/login_screen.dart';
 import 'package:provider/provider.dart';
 
@@ -29,7 +26,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
     final englishMode =
         Provider.of<LanguageProv>(context, listen: false).currentLanguage ==
         "en";
-    final user = Provider.of<UserProvider>(context, listen: false);
     String email = _emailController.text;
     String username = _usernameController.text;
     String password = _passwordController.text;

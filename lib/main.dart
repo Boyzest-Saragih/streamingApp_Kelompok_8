@@ -3,7 +3,6 @@ import 'package:flutter_fe/provider/favoriteMovies.dart';
 import 'package:flutter_fe/provider/language.dart';
 import 'package:flutter_fe/provider/theme.dart';
 import 'package:flutter_fe/provider/user.dart';
-import 'package:flutter_fe/screens/drawer.dart';
 import 'package:flutter_fe/screens/introScreen.dart';
 import 'package:flutter_fe/screens/settings_screen.dart';
 import 'package:provider/provider.dart';
@@ -103,7 +102,7 @@ class MyApp extends StatelessWidget {
         ),
       ),
 
-      home: settingsScreen(),
+      home: Introscreen(),
     );
   }
 }

@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_fe/provider/language.dart';
 import 'package:flutter_fe/provider/user.dart';
 import 'package:flutter_fe/screens/drawer.dart';
-import 'package:flutter_fe/screens/home_screen.dart';
 import 'package:provider/provider.dart';
 
 class CompleteProfile extends StatefulWidget {

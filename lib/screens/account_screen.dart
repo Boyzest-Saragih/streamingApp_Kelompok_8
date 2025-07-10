@@ -88,6 +88,7 @@ class AccountScreen extends StatelessWidget {
               _buildItem(
                 Icons.movie_filter,
                 enLang ? "Fav Genres" : "Genre Favorit",
+                // ignore: unnecessary_type_check
                 user.genres is List
                     ? (user.genres as List)
                         .map((genre) => enLang

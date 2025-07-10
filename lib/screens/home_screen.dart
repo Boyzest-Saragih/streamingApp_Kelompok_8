@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_fe/provider/language.dart';
 import 'package:flutter_fe/provider/theme.dart';
-import 'package:flutter_fe/screens/filterAllMovie.dart';
 import 'package:flutter_fe/screens/movieListScreen.dart';
-import 'package:flutter_fe/screens/searchScreen.dart';
 import 'package:flutter_fe/screens/watch_screen.dart';
 import 'package:provider/provider.dart';
 import '../utils/api.dart';
