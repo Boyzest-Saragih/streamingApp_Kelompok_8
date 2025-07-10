@@ -18,6 +18,7 @@ class DrawerScreen extends StatefulWidget {
 class _DrawerScreenState extends State<DrawerScreen> {
   int selectedScreen = 0;
 
+
   final List<Widget> screens = [
     HomePage(),
     AccountScreen(),
@@ -29,16 +30,20 @@ class _DrawerScreenState extends State<DrawerScreen> {
   Widget build(BuildContext context) {
     final themeProvider = Provider.of<ThemeProv>(context);
     final languageProvider = Provider.of<LanguageProv>(context);
+
     final user = Provider.of<UserProvider>(context).currentUser;
     final isEnglish = languageProvider.currentLanguage == "en";
+
 
     return Scaffold(
       appBar: AppBar(
         title: const Text("MovieFy"),
         leading: Builder(
           builder: (context) => IconButton(
+
             icon: const Icon(Icons.menu),
             onPressed: () => Scaffold.of(context).openDrawer(),
+
           ),
         ),
       ),
@@ -86,6 +91,7 @@ class _DrawerScreenState extends State<DrawerScreen> {
                 value: themeProvider.isDarkMode,
                 onChanged: (_) => themeProvider.toggleTheme(),
                 activeColor: Colors.amber,
+
               ),
             ),
           ],

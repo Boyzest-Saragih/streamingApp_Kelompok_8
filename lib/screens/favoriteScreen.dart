@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_fe/provider/favoriteMovies.dart';
+import 'package:flutter_fe/provider/language.dart';
 import 'package:flutter_fe/provider/user.dart';
 import 'package:flutter_fe/utils/api.dart';
 import 'package:flutter_fe/screens/watch_screen.dart';
@@ -18,6 +19,11 @@ class _FavoritescreenState extends State<Favoritescreen> {
     final users = Provider.of<UserProvider>(context);
     final user = users.currentUser;
     final favoriteMovies = Provider.of<FavoriteMoviesProvider>(context);
+    final languageProvider = Provider.of<LanguageProv>(context);
+    final enLang = languageProvider.currentLanguage == "en";
+
+    print('FavoriteScreen - Current language: ${languageProvider.currentLanguage}');
+    print('FavoriteScreen - enLang: $enLang');
 
     final favorite = favoriteMovies.getFavorites(user!.userId.toString());
 
@@ -106,9 +112,10 @@ class _FavoritescreenState extends State<Favoritescreen> {
                           ],
                         ),
                       ),
-                    );
-                  },
-                ),
+                    ),
+                  );
+                },
+              ),
       ),
     );
   }

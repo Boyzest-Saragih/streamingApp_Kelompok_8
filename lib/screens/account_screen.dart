@@ -8,18 +8,52 @@ import 'package:provider/provider.dart';
 class AccountScreen extends StatelessWidget {
   const AccountScreen({super.key});
 
+  static const List<Map<String, String>> movieGenres = [
+    {'en': 'Action', 'in': 'Aksi'},
+    {'en': 'Adventure', 'in': 'Petualangan'},
+    {'en': 'Animation', 'in': 'Animasi'},
+    {'en': 'Comedy', 'in': 'Komedi'},
+    {'en': 'Crime', 'in': 'Kriminal'},
+    {'en': 'Documentary', 'in': 'Dokumenter'},
+    {'en': 'Drama', 'in': 'Drama'},
+    {'en': 'Fantasy', 'in': 'Fantasi'},
+    {'en': 'Historical', 'in': 'Sejarah'},
+    {'en': 'Horror', 'in': 'Horor'},
+    {'en': 'Musical', 'in': 'Musikal'},
+    {'en': 'Mystery', 'in': 'Misteri'},
+    {'en': 'Romance', 'in': 'Romansa'},
+    {'en': 'Science Fiction', 'in': 'Fiksi Ilmiah'},
+    {'en': 'Thriller', 'in': 'Thriller'},
+    {'en': 'Western', 'in': 'Barat'},
+    {'en': 'War', 'in': 'Perang'},
+    {'en': 'Biography', 'in': 'Biografi'},
+    {'en': 'Family', 'in': 'Keluarga'},
+    {'en': 'Sports', 'in': 'Olahraga'},
+    {'en': 'Superhero', 'in': 'Pahlawan Super'},
+    {'en': 'Noir', 'in': 'Noir'},
+    {'en': 'Psychological', 'in': 'Psikologis'},
+    {'en': 'Disaster', 'in': 'Bencana'},
+  ];
+
+  static const Map<String, String> genderMap = {
+    'Male': 'Laki-laki',
+    'Female': 'Perempuan',
+  };
+
   @override
   Widget build(BuildContext context) {
     final userProvider = Provider.of<UserProvider>(context);
     final themeProvider = Provider.of<ThemeProv>(context);
     final user = userProvider.currentUser;
     final theme = themeProvider.isDarkMode;
-
-    final data = user;
-
     final languageProvider = Provider.of<LanguageProv>(context);
-    final enLang = languageProvider.currentLanguage == "en" ? true : false;
-    print(data?.genres);
+    final enLang = languageProvider.currentLanguage == "en";
+
+    print('AccountScreen - Current language: ${languageProvider.currentLanguage}');
+    print('AccountScreen - enLang: $enLang');
+    print('AccountScreen - Gender: ${user?.gender}');
+    print('AccountScreen - Genres: ${user?.genres}');
+
     return Scaffold(
       body: Padding(
         padding: const EdgeInsets.fromLTRB(20, 2, 20, 2),
@@ -35,11 +69,11 @@ class AccountScreen extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 20),
-              _buildItem(Icons.email, "Email", data!.email),
+              _buildItem(Icons.email, "Email", user!.email),
               _buildItem(
                 Icons.person,
                 enLang ? "Username" : "Nama pengguna",
-                data.username,
+                user.username,
               ),
               _buildItem(
                 Icons.lock,
@@ -49,85 +83,87 @@ class AccountScreen extends StatelessWidget {
               _buildItem(
                 Icons.wc,
                 enLang ? "Gender" : "Jenis Kelamin",
-                data.gender,
+                enLang ? user.gender : genderMap[user.gender] ?? user.gender,
               ),
               _buildItem(
                 Icons.movie_filter,
                 enLang ? "Fav Genres" : "Genre Favorit",
-                data.genres is List
-                    ? (data.genres as List).join(", ")
-                    : data.genres.toString(),
+                user.genres is List
+                    ? (user.genres as List)
+                        .map((genre) => enLang
+                            ? genre
+                            : movieGenres
+                                    .firstWhere(
+                                      (g) => g['en'] == genre,
+                                      orElse: () => {'en': genre, 'in': genre},
+                                    )['in']!)
+                        .join(", ")
+                    : user.genres.toString(),
               ),
               _buildItem(
                 Icons.cake,
                 enLang ? "Birth Date" : "Tanggal Lahir",
-                "${data.birthDate.day}/${data.birthDate.month}/${data.birthDate.year}",
+                "${user.birthDate.day}/${user.birthDate.month}/${user.birthDate.year}",
               ),
-
-
               const SizedBox(height: 30),
-
               SizedBox(
                 width: double.infinity,
                 child: ElevatedButton.icon(
                   onPressed: () {
                     showDialog(
                       context: context,
-                      builder:
-                          (context) => AlertDialog(
-                            title: Text(
-                              enLang ? "Confirm Logout" : "Konfirmasi Keluar",
-                              style: TextStyle(
-                                color: theme ? Colors.white : Colors.black,
-                              ),
-                            ),
-                            content: Text(
-                              enLang
-                                  ? "Are you sure you want to logout?"
-                                  : "Apakah Anda yakin ingin keluar?",
-                              style: TextStyle(
-                                color: theme ? Colors.white : Colors.black,
-                              ),
-                            ),
-                            actions: [
-                              TextButton(
-                                onPressed: () => Navigator.pop(context),
-                                child: Text(enLang ? "Cancel" : "Batal"),
-                              ),
-                              TextButton(
-                                onPressed: () {
-                                  userProvider.userLogout();
-                                  Navigator.pop(context);
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    SnackBar(
-                                      content: Text(
-                                        enLang
-                                            ? "Logged Out Successfully"
-                                            : "Beerhasil Keluar",
-                                        style: TextStyle(
-                                          color:
-                                              theme
-                                                  ? Colors.black
-                                                  : Colors.black,
-                                        ),
-                                      ),
-                                      backgroundColor:
-                                          theme ? Colors.white : Colors.black,
-                                      duration: const Duration(seconds: 2),
-                                    ),
-                                  );
-                                  Navigator.pushAndRemoveUntil(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (_) => const LoginScreen(),
-                                    ),
-                                    (route) => false,
-                                  );
-                                },
-                                child: Text(enLang ? "Logout" : "Keluar"),
-                              ),
-                            ],
+                      builder: (context) => AlertDialog(
+                        title: Text(
+                          enLang ? "Confirm Logout" : "Konfirmasi Keluar",
+                          style: TextStyle(
+                            color: theme ? Colors.white : Colors.black,
                           ),
+                        ),
+                        content: Text(
+                          enLang
+                              ? "Are you sure you want to logout?"
+                              : "Apakah Anda yakin ingin keluar?",
+                          style: TextStyle(
+                            color: theme ? Colors.white : Colors.black,
+                          ),
+                        ),
+                        actions: [
+                          TextButton(
+                            onPressed: () => Navigator.pop(context),
+                            child: Text(enLang ? "Cancel" : "Batal"),
+                          ),
+                          TextButton(
+                            onPressed: () {
+                              userProvider.userLogout();
+                              Navigator.pop(context);
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text(
+                                    enLang
+                                        ? "Logged Out Successfully"
+                                        : "Beerhasil Keluar",
+                                    style: TextStyle(
+                                      color:
+                                          theme ? Colors.black : Colors.black,
+                                    ),
+                                  ),
+                                  backgroundColor:
+                                      theme ? Colors.white : Colors.black,
+                                  duration: const Duration(seconds: 2),
+                                ),
+                              );
+                              Navigator.pushAndRemoveUntil(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (_) => const LoginScreen(),
+                                ),
+                                (route) => false,
+                              );
+                            },
+                            child: Text(enLang ? "Logout" : "Keluar"),
+                          ),
+                        ],
+                      ),
                     );
                   },
                   style: ElevatedButton.styleFrom(
