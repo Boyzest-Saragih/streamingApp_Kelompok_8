@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_fe/provider/language.dart';
 import 'package:flutter_fe/provider/theme.dart';
+import 'package:flutter_fe/screens/movieListScreen.dart';
 import 'package:flutter_fe/screens/searchScreen.dart';
 import 'package:flutter_fe/screens/watch_screen.dart';
 import 'package:provider/provider.dart';
@@ -123,6 +124,7 @@ class _HomePageState extends State<HomePage> {
                       setState(() {
                         isfiltered = false;
                         filteredMovie = [];
+                        pickedRange = null;
                       });
                     }, 
                     child: Text( enLang? "Clear" : "Hapus"))
@@ -209,11 +211,22 @@ class _HomePageState extends State<HomePage> {
             isfiltered 
             ? SizedBox(height: 40,)
             : SizedBox.shrink(),
+
+
             // Top List
             Padding(
               padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
               child: TextButton(
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.push(
+                    context, 
+                    MaterialPageRoute(builder: (context) => movielistpage(
+                      title: enLang? "Top Movie" : "Folm Teratas", 
+                      movies: popularMovies,
+                      filterable: true,
+                    ),),
+                  );
+                },
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -325,7 +338,16 @@ class _HomePageState extends State<HomePage> {
             Padding(
               padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
               child: TextButton(
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.push(
+                    context, 
+                    MaterialPageRoute(builder: (context) => movielistpage(
+                      title: enLang? "Top Rated Movie" : "Film Nilai Tertinggi", 
+                      movies: topRatedMovies,
+                      filterable: true,
+                    ),),
+                  );
+                },
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -435,7 +457,16 @@ class _HomePageState extends State<HomePage> {
             Padding(
               padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
               child: TextButton(
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.push(
+                    context, 
+                    MaterialPageRoute(builder: (context) => movielistpage(
+                      title: enLang? "Upcoming Movie" : "Film Mendatang", 
+                      movies: upcomingMovies,
+                      filterable: true,
+                    ),),
+                  );
+                },
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
