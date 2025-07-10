@@ -11,26 +11,26 @@ class Introscreen extends StatefulWidget {
 }
 
 class _IntroscreenState extends State<Introscreen> {
+final List<Map<String, String>> dummyMovies = const [
+  {
+    "title": "Top Gun Maverick",
+    "poster":
+        "https://raw.githubusercontent.com/Boyzest-Saragih/streamingApp_Kelompok_8/main/assets/MV5BMDBkZDNjMWEtOTdmMi00NmExLTg5MmMtNTFlYTJlNWY5YTdmXkEyXkFqcGc%40._V1_.jpg",
+  },
+  {
+    "title": "One Piece",
+    "poster":
+        "https://raw.githubusercontent.com/Boyzest-Saragih/streamingApp_Kelompok_8/main/assets/MV5BMTNjNGU4NTUtYmVjMy00YjRiLTkxMWUtNzZkMDNiYjZhNmViXkEyXkFqcGc%40._V1_FMjpg_UX1000_.jpg",
+  },
+  {
+    "title": "Grand Turismo",
+    "poster":
+        "https://raw.githubusercontent.com/Boyzest-Saragih/streamingApp_Kelompok_8/main/assets/MV5BYmZhOTkzMDctNzQ4My00MDg5LWI0NTItODczZTdhNjJmYTE3XkEyXkFqcGc%40._V1_.jpg",
+  },
+];
 
-  final List<Map<String, String>> dummyMovies = const [
-    {
-      "title": "Top Gun Maverick",
-      "poster":
-          "https://m.media-amazon.com/images/M/MV5BMDBkZDNjMWEtOTdmMi00NmExLTg5MmMtNTFlYTJlNWY5YTdmXkEyXkFqcGc@._V1_.jpg",
-    },
-    {
-      "title": "One Piece",
-      "poster":
-          "https://m.media-amazon.com/images/M/MV5BMTNjNGU4NTUtYmVjMy00YjRiLTkxMWUtNzZkMDNiYjZhNmViXkEyXkFqcGc@._V1_FMjpg_UX1000_.jpg",
-    },
-    {
-      "title": "Grand Turismo",
-      "poster":
-          "https://m.media-amazon.com/images/M/MV5BYmZhOTkzMDctNzQ4My00MDg5LWI0NTItODczZTdhNjJmYTE3XkEyXkFqcGc@._V1_.jpg",
-    },
-  ];
-  
-    int _currentImageIndex = 0;
+
+  int _currentImageIndex = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -128,7 +128,10 @@ class _IntroscreenState extends State<Introscreen> {
                     },
                     child: const Text(
                       "Welcome To MovieFy",
-                      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16,
+                      ),
                     ),
                   ).animate().slideY(duration: 600.ms).fadeIn(),
                 ],
