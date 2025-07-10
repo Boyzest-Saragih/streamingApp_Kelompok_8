@@ -37,6 +37,7 @@ class _WatchPageState extends State<WatchPage> {
     final detail = await detailFuture;
     final videos = await videoFuture;
 
+    print(detail);
     setState(() {
       movieData = detail;
       movieVideosData = videos;
@@ -85,34 +86,43 @@ class _WatchPageState extends State<WatchPage> {
           title: Text(movieData?["original_title"] ?? "Loading..."),
           actions: [
             IconButton(
-  onPressed: () {
-    final userId = user!.userId.toString();
-    final isFav = favoriteMovies.isFavorite(userId, widget.idMovie);
+              onPressed: () {
+                final userId = user.userId.toString();
+                final isFav = favoriteMovies.isFavorite(userId, widget.idMovie);
 
-    if (isFav) {
-      favoriteMovies.removeFavorite(
-        userId,
-        Movie(movieId: widget.idMovie),
-      );
-    } else {
-      favoriteMovies.addFavorite(
-        userId,
-        Movie(movieId: widget.idMovie),
-      );
-    }
+                if (isFav) {
+                  favoriteMovies.removeFavorite(
+                    userId,
+                    Movie(
+                      movieId: widget.idMovie,
+                      title: movieData?['title'],
+                      rating: movieData?['vote_average'].toStringAsFixed(2),
+                      posterPath: movieData?['poster_path'],
+                    ),
+                  );
+                } else {
+                  favoriteMovies.addFavorite(
+                    userId,
+                    Movie(
+                      movieId: widget.idMovie,
+                      title: movieData?['title'],
+                      rating: movieData?['vote_average'].toStringAsFixed(2),
+                      posterPath: movieData?['poster_path'],
+                    ),
+                  );
+                }
 
-    setState(() {}); 
-  },
-  icon: Icon(
-    favoriteMovies.isFavorite(
-      user!.userId.toString(),
-      widget.idMovie,
-    )
-        ? Icons.bookmark_remove
-        : Icons.bookmark_add,
-  ),
-),
-
+                setState(() {});
+              },
+              icon: Icon(
+                favoriteMovies.isFavorite(
+                      user!.userId.toString(),
+                      widget.idMovie,
+                    )
+                    ? Icons.bookmark_remove
+                    : Icons.bookmark_add,
+              ),
+            ),
           ],
         ),
         body: const Center(child: CircularProgressIndicator()),

@@ -31,8 +31,8 @@ class _movielistpageState extends State<movielistpage> {
   Future<void> pickDateRange() async {
     final DateTimeRange? picked = await showDateRangePicker(
       context: context,
-      firstDate: DateTime(2000),
-      lastDate: DateTime.now(),
+      firstDate: DateTime(2006),
+      lastDate: DateTime(2025),
     );
 
 
@@ -50,19 +50,6 @@ class _movielistpageState extends State<movielistpage> {
             releaseDate.isBefore(picked.end.add(Duration(days: 1)));
         }).toList();
     });
-    
-    
-  //   if (picked != null) {
-  //     final fromDate = _formatDate(picked.start);
-  //     final toDate = _formatDate(picked.end);
-
-  //     final result = await getMoviesByDate(fromDate, toDate);
-  //     if (result != null && result["results"] != null) {
-  //       setState(() {
-  //         pickedRange = picked;
-  //         TampilkanMovie = result["results"];
-  //       });
-  //     }
     }
   }
 

@@ -96,6 +96,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
           ),
           contentPadding: EdgeInsets.symmetric(horizontal: 24, vertical: 20),
           title: Text(
+            textAlign: TextAlign.center,
             englishMode ? "Confirm Email?" : "Konfirmasi Email?",
             style: TextStyle(color: Colors.grey),
           ),
@@ -131,6 +132,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   password: password,
                   gender: "",
                   genres: [""],
+                  birthDate: DateTime(2000, 1, 1),
                 );
                 Navigator.push(
                   context,

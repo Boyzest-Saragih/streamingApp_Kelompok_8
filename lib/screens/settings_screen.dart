@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_fe/provider/language.dart';
-import 'package:flutter_fe/provider/theme.dart';
 import 'package:share_plus/share_plus.dart';
 
 class settingsScreen extends StatefulWidget {
@@ -17,9 +16,6 @@ class _settingsScreenState extends State<settingsScreen> {
   @override
   Widget build(BuildContext context) {
     final languageProvider = Provider.of<LanguageProv>(context);
-    final themeProvider = Provider.of<ThemeProv>(context);
-    final isDarkMode = themeProvider.isDarkMode;
-
     final isEnglish = languageProvider.currentLanguage == 'en';
     _selectedLanguage = languageProvider.currentLanguage;
 
@@ -27,41 +23,6 @@ class _settingsScreenState extends State<settingsScreen> {
       final linkApp =
           "https://github.com/Boyzest-Saragih/streamingApp_Kelompok_8.git";
       Share.share("Gas Streaming di MovieFy! 🎬\n$linkApp");
-    }
-
-    snackBarIsDarkMode(isDarkMode) {
-      if (isDarkMode) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            duration: Duration(seconds: 1),
-            content: Text(
-              isEnglish ? "Switch to light mode" : "Beralih ke mode terang",
-            ),
-            action: SnackBarAction(
-              label: 'Ok!',
-              onPressed: () {
-                ScaffoldMessenger.of(context).hideCurrentSnackBar();
-              },
-            ),
-          ),
-        );
-      } else {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            duration: Duration(seconds: 2),
-
-            content: Text(
-              isEnglish ? "Switch to dark mode" : "Beralih ke mode gelap😹😈",
-            ),
-            action: SnackBarAction(
-              label: 'Ok!',
-              onPressed: () {
-                ScaffoldMessenger.of(context).hideCurrentSnackBar();
-              },
-            ),
-          ),
-        );
-      }
     }
 
     return Scaffold(
@@ -129,22 +90,6 @@ class _settingsScreenState extends State<settingsScreen> {
             ),
           ),
           const SizedBox(height: 10),
-
-          ListTile(
-            leading: Icon(isDarkMode ? Icons.dark_mode : Icons.light_mode),
-            title: Text(isEnglish ? "Dark Mode" : "Mode Gelap"),
-            trailing: Switch(
-              value: isDarkMode,
-              onChanged: (val) {
-                snackBarIsDarkMode(isDarkMode);
-                themeProvider.toggleTheme();
-              },
-              activeColor: Colors.amber,
-              inactiveThumbColor: Colors.grey,
-            ),
-          ),
-          const SizedBox(height: 10),
-
           ListTile(
             leading: Icon(Icons.share),
             title: Text(isEnglish ? "Share App" : "Bagikan Aplikasi"),
@@ -153,7 +98,6 @@ class _settingsScreenState extends State<settingsScreen> {
             },
           ),
           const SizedBox(height: 10),
-
           ListTile(
             leading: Icon(Icons.info_outline),
             title: Text(isEnglish ? "App Info" : "Tentang Aplikasi"),
@@ -169,7 +113,7 @@ class _settingsScreenState extends State<settingsScreen> {
                         ? "MovieFy is a simple movie app for practice and learning."
                         : "MovieFy adalah aplikasi film sederhana untuk latihan dan pembelajaran.",
                     style: TextStyle(
-                      color: isDarkMode ? Colors.white : Colors.black,
+                      color: Colors.black,
                     ),
                   ),
                 ],

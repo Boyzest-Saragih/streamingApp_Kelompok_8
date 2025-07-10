@@ -13,39 +13,54 @@ class CompleteProfile extends StatefulWidget {
 }
 
 class _CompleteProfileState extends State<CompleteProfile> {
-  final List<String> movieGenres = [
-    "Action",
-    "Adventure",
-    "Animation",
-    "Comedy",
-    "Crime",
-    "Documentary",
-    "Drama",
-    "Fantasy",
-    "Historical",
-    "Horror",
-    "Musical",
-    "Mystery",
-    "Romance",
-    "Science Fiction",
-    "Thriller",
-    "Western",
-    "War",
-    "Biography",
-    "Family",
-    "Sports",
-    "Superhero",
-    "Noir",
-    "Psychological",
-    "Disaster",
+  final List<Map<String, String>> movieGenres = [
+    {'en': 'Action', 'in': 'Aksi'},
+    {'en': 'Adventure', 'in': 'Petualangan'},
+    {'en': 'Animation', 'in': 'Animasi'},
+    {'en': 'Comedy', 'in': 'Komedi'},
+    {'en': 'Crime', 'in': 'Kriminal'},
+    {'en': 'Documentary', 'in': 'Dokumenter'},
+    {'en': 'Drama', 'in': 'Drama'},
+    {'en': 'Fantasy', 'in': 'Fantasi'},
+    {'en': 'Historical', 'in': 'Sejarah'},
+    {'en': 'Horror', 'in': 'Horor'},
+    {'en': 'Musical', 'in': 'Musikal'},
+    {'en': 'Mystery', 'in': 'Misteri'},
+    {'en': 'Romance', 'in': 'Romansa'},
+    {'en': 'Science Fiction', 'in': 'Fiksi Ilmiah'},
+    {'en': 'Thriller', 'in': 'Thriller'},
+    {'en': 'Western', 'in': 'Barat'},
+    {'en': 'War', 'in': 'Perang'},
+    {'en': 'Biography', 'in': 'Biografi'},
+    {'en': 'Family', 'in': 'Keluarga'},
+    {'en': 'Sports', 'in': 'Olahraga'},
+    {'en': 'Superhero', 'in': 'Pahlawan Super'},
+    {'en': 'Noir', 'in': 'Noir'},
+    {'en': 'Psychological', 'in': 'Psikologis'},
+    {'en': 'Disaster', 'in': 'Bencana'},
   ];
-  final List<String> genderOptions = [
-    'Male',
-    'Female',
+  final List<Map<String, String>> genderOptions = [
+    {'en': 'Male', 'in': 'Laki-laki'},
+    {'en': 'Female', 'in': 'Perempuan'},
   ];
 
   List<String> selectedGenres = [];
   String? selectedGender;
+  DateTime? selectedBirthDate;
+
+  void _pickBirthDate() async {
+    final DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: DateTime(2000, 1, 1),
+      firstDate: DateTime(1900),
+      lastDate: DateTime.now(),
+    );
+    if (picked != null) {
+      setState(() {
+        selectedBirthDate = picked;
+      });
+    }
+  }
 
   void completeProfileButton() {
     final user = Provider.of<UserProvider>(context, listen: false);
@@ -54,8 +69,9 @@ class _CompleteProfileState extends State<CompleteProfile> {
 
     final genreValid = selectedGenres.length >= 3;
     final genderValid = selectedGender != null;
+    final birthDateValid = selectedBirthDate != null;
 
-    if (!genreValid && !genderValid) {
+    if (!genreValid && !genderValid && !birthDateValid) {
       showDialog(
         context: context,
         builder: (_) => AlertDialog(
@@ -64,8 +80,8 @@ class _CompleteProfileState extends State<CompleteProfile> {
             style: TextStyle(color: Colors.amber),
           ),
           content: Text(enLang
-              ? "Please select at least 3 genres and your gender."
-              : "Silakan pilih minimal 3 genre dan jenis kelamin Anda."),
+              ? "Please select at least 3 genres, gender and your birth date."
+              : "Silakan pilih minimal 3 genre, jenis kelamin dan tanggal lahir Anda."),
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context),
@@ -113,18 +129,43 @@ class _CompleteProfileState extends State<CompleteProfile> {
       return;
     }
 
-    user.updateUser(user.currentUser!.email, selectedGender!, selectedGenres);
+    if (!birthDateValid) {
+      showDialog(
+        context: context,
+        builder: (_) => AlertDialog(
+          title: Text(
+            enLang ? "Missing Birth Date" : "Tanggal Lahir Belum Dipilih",
+            style: TextStyle(color: Colors.amber),
+          ),
+          content: Text(enLang
+              ? "Please select your birth date"
+              : "Silakan pilih tanggal lahir Anda."),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: const Text("OK"),
+            ),
+          ],
+        ),
+      );
+      return;
+    }
+
+    user.updateUser(user.currentUser!.email, selectedGender!, selectedGenres, selectedBirthDate!);
 
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => drawerCreen()),
+      MaterialPageRoute(builder: (context) => DrawerScreen()),
     );
   }
 
   @override
   Widget build(BuildContext context) {
     final languageProvider = Provider.of<LanguageProv>(context);
-    final enLang = languageProvider.currentLanguage == "en" ? true : false;
+    final enLang = languageProvider.currentLanguage == "en";
+
+    print('CompleteProfile - Current language: ${languageProvider.currentLanguage}');
+    print('CompleteProfile - enLang: $enLang');
 
     return Scaffold(
       appBar: AppBar(
@@ -142,16 +183,17 @@ class _CompleteProfileState extends State<CompleteProfile> {
               spacing: 8,
               runSpacing: 8,
               children: movieGenres.map((genre) {
+                final genreKey = enLang ? genre['en']! : genre['in']!;
                 return FilterChip(
                   avatar: const Icon(Icons.movie, size: 18),
-                  label: Text(genre),
-                  selected: selectedGenres.contains(genre),
+                  label: Text(genreKey),
+                  selected: selectedGenres.contains(genre['en']!),
                   onSelected: (bool selected) {
                     setState(() {
                       if (selected) {
-                        selectedGenres.add(genre);
+                        selectedGenres.add(genre['en']!);
                       } else {
-                        selectedGenres.remove(genre);
+                        selectedGenres.remove(genre['en']!);
                       }
                     });
                   },
@@ -160,7 +202,7 @@ class _CompleteProfileState extends State<CompleteProfile> {
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(20),
                     side: BorderSide(
-                      color: selectedGenres.contains(genre)
+                      color: selectedGenres.contains(genre['en']!)
                           ? Colors.amber
                           : Colors.grey,
                     ),
@@ -174,9 +216,10 @@ class _CompleteProfileState extends State<CompleteProfile> {
             Text(enLang ? "Select your gender" : "Pilih jenis kelamin Anda"),
             Column(
               children: genderOptions.map((gender) {
-                return RadioListTile(
-                  title: Text(gender),
-                  value: gender,
+                final genderKey = enLang ? gender['en']! : gender['in']!;
+                return RadioListTile<String>(
+                  title: Text(genderKey),
+                  value: gender['en']!,
                   groupValue: selectedGender,
                   onChanged: (String? value) {
                     setState(() {
@@ -186,6 +229,18 @@ class _CompleteProfileState extends State<CompleteProfile> {
                   activeColor: Colors.amber,
                 );
               }).toList(),
+            ),
+            const SizedBox(height: 20),
+            Text(enLang ? "Select your birth date" : "Pilih tanggal lahir Anda"),
+            TextButton.icon(
+              onPressed: _pickBirthDate,
+              icon: const Icon(Icons.calendar_today),
+              label: Text(
+                selectedBirthDate == null
+                    ? (enLang ? "Pick a date" : "Pilih tanggal")
+                    : "${selectedBirthDate!.day}/${selectedBirthDate!.month}/${selectedBirthDate!.year}",
+                selectionColor: Colors.white,
+              ),
             ),
             const SizedBox(height: 40),
             ElevatedButton(
