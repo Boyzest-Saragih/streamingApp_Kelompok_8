@@ -43,7 +43,7 @@ class _WatchPageState extends State<WatchPage> {
       movieVideosData = videos;
     });
 
-    // _initializeVideoPlayer();
+    _initializeVideoPlayer();
 
     setState(() => isLoading = false);
   }
