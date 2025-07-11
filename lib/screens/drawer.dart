@@ -72,14 +72,14 @@ class _DrawerScreenState extends State<DrawerScreen> {
             ),
 
             _buildDrawerItem(Icons.home_outlined, "Home", 0, isEnglish),
+            _buildDrawerItem(Icons.search_sharp, "Discover", 4, isEnglish),
+            _buildDrawerItem(Icons.bookmark_outline, "Favorite", 3, isEnglish),
             _buildDrawerItem(
               Icons.account_circle_outlined,
               "Profile",
               1,
               isEnglish,
             ),
-            _buildDrawerItem(Icons.search_sharp, "Discover", 4, isEnglish),
-            _buildDrawerItem(Icons.bookmark_outline, "Favorite", 3, isEnglish),
             _buildDrawerItem(Icons.settings_outlined, "Settings", 2, isEnglish),
 
             const Divider(thickness: 1, height: 20),
